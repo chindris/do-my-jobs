@@ -5,11 +5,13 @@ module:
   block_content: 0
   breakpoint: 0
   ckeditor: 0
+  comment: 0
   config: 0
   contextual: 0
   ctools: 0
   datetime: 0
   dblog: 0
+  devel: 0
   editor: 0
   emarket_order: 0
   entity_reference: 0
@@ -19,6 +21,7 @@ module:
   filter: 0
   help: 0
   image: 0
+  inline_entity_form: 0
   link: 0
   link_css: 0
   menu_ui: 0

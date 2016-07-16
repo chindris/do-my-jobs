@@ -1,0 +1,23 @@
+uuid: db6f8ca7-ac21-46a7-b50f-484b057cb76f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.order.field_email
+    - field.field.node.order.field_order_items
+    - node.type.order
+  module:
+    - user
+id: node.order.teaser
+targetEntityType: node
+bundle: order
+mode: teaser
+content:
+  links:
+    weight: 100
+  workbench_moderation_control:
+    weight: -20
+hidden:
+  field_email: true
+  field_order_items: true

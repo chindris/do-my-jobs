@@ -1,0 +1,43 @@
+uuid: be0c07a2-730d-4152-9149-04b7487b17e8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.order_item.comment
+    - field.field.node.order_item.field_description
+    - field.field.node.order_item.field_quantity
+    - node.type.order_item
+  module:
+    - workbench_moderation
+id: node.order_item.default
+targetEntityType: node
+bundle: order_item
+mode: default
+content:
+  field_description:
+    weight: 3
+    settings:
+      rows: 2
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textarea
+  field_quantity:
+    weight: 1
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+  title:
+    type: string_textfield
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  comment: true
+  created: true
+  path: true
+  promote: true
+  sticky: true
+  uid: true

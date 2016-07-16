@@ -1,0 +1,23 @@
+uuid: 7664f555-4ca9-4646-98ac-89036e4b7bf1
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.order_item.comment
+    - field.field.node.order_item.field_description
+    - field.field.node.order_item.field_quantity
+    - node.type.order_item
+  module:
+    - user
+id: node.order_item.teaser
+targetEntityType: node
+bundle: order_item
+mode: teaser
+content:
+  links:
+    weight: 100
+hidden:
+  comment: true
+  field_description: true
+  field_quantity: true

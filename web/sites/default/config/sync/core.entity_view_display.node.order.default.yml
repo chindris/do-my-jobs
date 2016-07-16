@@ -1,0 +1,38 @@
+uuid: 80f69747-260f-45e0-b70f-430487b33b5c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.order.field_email
+    - field.field.node.order.field_order_items
+    - node.type.order
+  module:
+    - user
+id: node.order.default
+targetEntityType: node
+bundle: order
+mode: default
+content:
+  field_email:
+    weight: 101
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  field_order_items:
+    weight: 102
+    label: above
+    settings:
+      view_mode: full
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_entity_view
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+  workbench_moderation_control:
+    weight: -20
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

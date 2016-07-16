@@ -1,0 +1,42 @@
+uuid: f0e1dc99-3aa4-446c-a23c-6679ab343c74
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.order_item.comment
+    - field.field.node.order_item.field_description
+    - field.field.node.order_item.field_quantity
+    - node.type.order_item
+  module:
+    - comment
+    - user
+id: node.order_item.default
+targetEntityType: node
+bundle: order_item
+mode: default
+content:
+  comment:
+    weight: 3
+    label: above
+    settings:
+      pager_id: 0
+    third_party_settings: {  }
+    type: comment_default
+  field_description:
+    weight: 2
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  field_quantity:
+    weight: 0
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_decimal
+hidden:
+  links: true

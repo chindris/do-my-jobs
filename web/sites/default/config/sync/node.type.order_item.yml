@@ -1,0 +1,17 @@
+uuid: 5c44ee96-3e2c-4900-8a56-c56c95caa4db
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Order item'
+type: order_item
+description: 'Stores information about order items'
+help: ''
+new_revision: false
+preview_mode: 0
+display_submitted: false
