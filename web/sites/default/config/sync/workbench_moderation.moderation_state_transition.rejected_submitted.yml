@@ -1,0 +1,12 @@
+uuid: 0dfc3c22-fec2-46cb-af09-9b281c7952d9
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.rejected
+    - workbench_moderation.moderation_state.submitted
+id: rejected_submitted
+label: Resubmit
+stateFrom: rejected
+stateTo: submitted
+weight: 2

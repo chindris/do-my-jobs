@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "463eb1b52a9d95f87cd174aed394b99b",
-    "content-hash": "17c9eb8646902e595e0825051a718214",
+    "hash": "9d82d19a6a9cb6ad80168a5ec625a991",
+    "content-hash": "f4105c4f4ff93ead7b0a998a390bbfef",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -1239,6 +1239,37 @@
             "time": "2015-12-10 12:36:16"
         },
         {
+            "name": "drupal/inline_entity_form",
+            "version": "8.1.0-alpha6",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/inline_entity_form",
+                "reference": "27af4de9fd961fa6ae1369604d05fec8b06db867"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/inline_entity_form-8.x-1.0-alpha6.zip",
+                "reference": "27af4de9fd961fa6ae1369604d05fec8b06db867",
+                "shasum": null
+            },
+            "require": {
+                "drupal/core": "8.*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-8.x-1.x": "8.1.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.drupal-composer.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Provides a widget for inline management (creation, modification, removal) of referenced entities. ",
+            "homepage": "https://www.drupal.org/project/inline_entity_form",
+            "time": "2016-04-18 21:57:48"
+        },
+        {
             "name": "drupal/layout_plugin",
             "version": "8.1.0-alpha22",
             "source": {
@@ -1573,6 +1604,42 @@
             },
             "type": "drupal-module",
             "time": "2016-02-26 12:54:16"
+        },
+        {
+            "name": "drupal/workbench_moderation",
+            "version": "8.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/workbench_moderation",
+                "reference": "661c2108c84e961a00ae7174c91053858447a7d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/workbench_moderation-8.x-1.1.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "drupal/core": "8.*",
+                "drupal/options": "8.*",
+                "drupal/views": "8.*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-8.x-1.x": "8.1.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.drupal-composer.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Provides moderation states for content",
+            "homepage": "http://drupal.org/project/workbench_moderation",
+            "keywords": [
+                "Drupal"
+            ],
+            "time": "2016-06-28 04:04:37"
         },
         {
             "name": "drush/drush",

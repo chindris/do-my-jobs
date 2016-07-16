@@ -1,0 +1,12 @@
+uuid: 67d60f2b-c08a-4091-b507-38839e90e13f
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.accepted
+    - workbench_moderation.moderation_state.needs_clarification
+id: accepted_needs_clarification
+label: 'Needs clarification'
+stateFrom: accepted
+stateTo: needs_clarification
+weight: -8

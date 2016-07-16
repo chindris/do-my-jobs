@@ -1,0 +1,5 @@
+services:
+  emarket_order.state_transition:
+    class: '\Drupal\emarket_order\EventSubscriber\StateTransitionSubscriber'
+    tags:
+      - {name: event_subscriber}

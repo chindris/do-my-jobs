@@ -1,0 +1,12 @@
+uuid: bb082fbf-1a09-413f-b30c-c56cf9fd66b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.accepted
+    - workbench_moderation.moderation_state.submitted
+id: submitted_accepted
+label: Accept
+stateFrom: submitted
+stateTo: accepted
+weight: -14

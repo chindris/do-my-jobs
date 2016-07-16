@@ -1,0 +1,5 @@
+name: Emarket Order
+type: module
+description: 'Implements some customizations for the order content type.'
+package: Emarket
+core: 8.x

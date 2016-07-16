@@ -1,0 +1,12 @@
+uuid: 5ab89c5b-f54a-4d1b-8e66-470808e87bc5
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.aborted
+    - workbench_moderation.moderation_state.rejected
+id: rejected_aborted
+label: Abort
+stateFrom: rejected
+stateTo: aborted
+weight: 0

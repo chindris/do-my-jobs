@@ -1,0 +1,8 @@
+uuid: d72991a9-78f9-4050-965f-d9331819989b
+langcode: en
+status: true
+dependencies: {  }
+id: aborted
+label: Aborted
+published: false
+default_revision: false

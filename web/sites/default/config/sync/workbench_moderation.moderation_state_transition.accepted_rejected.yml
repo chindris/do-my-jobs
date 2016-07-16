@@ -1,0 +1,12 @@
+uuid: f24eafb2-bf86-47f9-a938-38772eaceec5
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.accepted
+    - workbench_moderation.moderation_state.rejected
+id: accepted_rejected
+label: Reject
+stateFrom: accepted
+stateTo: rejected
+weight: -7

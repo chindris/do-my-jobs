@@ -1,0 +1,223 @@
+<?php
+
+/**
+ * @file
+ *  Implements some customizations for the order content type.
+ */
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function emarket_order_menu_local_tasks_alter(&$data, $route_name) {
+  // If we are on a node route, keep the order_hash query parameter for all the
+  // tabs.
+  if (strpos($route_name, 'entity.node.') === 0) {
+    $order_hash = \Drupal::request()->get('order_hash');
+    if (!empty($order_hash)) {
+      foreach ($data['tabs'] as $index => $routes) {
+        foreach ($routes as $route_key => $route_info) {
+          if (strpos($route_key, 'entity.node.') === 0) {
+            $query = $route_info['#link']['url']->getOption('query');
+            $query['order_hash'] = $order_hash;
+            $route_info['#link']['url']->setOption('query', $query);
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function emarket_order_module_implements_alter(&$implementations, $hook) {
+  // We need our form alter hooks to run at the end.
+  if ($hook == 'form_alter') {
+    $group = $implementations['emarket_order'];
+    unset($implementations['emarket_order']);
+    $implementations['emarket_order'] = $group;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Dummy form alter hook, otherwise the module_implements_alter() will not work.
+ * We will just keep this emtpy hook until a better solution will be found.
+ */
+function emarket_order_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+
+}
+
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function emarket_order_form_node_order_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // When the current user is anonymous, we want to have the email field
+  // required. For the case when the user is logged in, we actually want to have
+  // the field hidden.
+  // @todo: alter also the node edit form!
+  if (\Drupal::currentUser()->isAnonymous()) {
+    $form['field_email']['widget'][0]['value']['#required'] = TRUE;
+  } else {
+    $form['field_email']['#access'] = FALSE;
+  }
+  emarket_order_order_form_alter($form, $form_state, $form_id);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function emarket_order_form_node_order_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  emarket_order_order_form_alter($form, $form_state, $form_id);
+}
+
+/**
+ * Performs common alterations for the node order form (add and edit).
+ */
+function emarket_order_order_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // Also, the title should not be mandatory.
+  //$form['title']['widget']['0']['value']['#required'] = FALSE;
+  $form['actions']['submit']['#submit'][] = 'emarket_order_node_order_form_submit';
+}
+
+/**
+ * Additional submit handler for the order node form.
+ */
+function emarket_order_node_order_form_submit(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  // Preserve the order_hash if we have it in the query.
+  $order_hash = \Drupal::request()->get('order_hash');
+  if (!empty($order_hash)) {
+    $redirect = $form_state->getRedirect();
+    if (!empty($redirect) && $redirect instanceof \Drupal\Core\Url) {
+      $query = $redirect->getOption('query');
+      $query['order_hash'] = $order_hash;
+      $redirect->setOption('query', $query);
+    }
+  }
+}
+
+/**
+ * Implements hook_mail().
+ */
+function emarket_order_mail($key, &$message, $params) {
+  /*$token_service = \Drupal::token();
+  $language_manager = \Drupal::languageManager();
+  $langcode = $message['langcode'];
+  $variables = array('user' => $params['account']);
+
+  $language = \Drupal::languageManager()->getLanguage($params['account']->getPreferredLangcode());
+  $original_language = $language_manager->getConfigOverrideLanguage();
+  $language_manager->setConfigOverrideLanguage($language);
+  $mail_config = \Drupal::config('user.mail');
+
+  $token_options = ['langcode' => $langcode, 'callback' => 'user_mail_tokens', 'clear' => TRUE];*/
+  switch ($key) {
+    case '_draft': {
+      $url = \Drupal\Core\Url::fromUserInput('/node/' . $params['entity']->id(), array('query' => array('order_hash' => emarket_order_get_hash_for_order($params['entity'])), 'absolute' => TRUE));
+      $message['subject'] = t('Order set to draft', array(), array('langcode' => $message['langcode']));
+      $message['body'][] = t('You have set an order to draft. To view the order, follow this url: !url', array('!url' => $url->toString()), array('langcode' => $message['langcode']));
+      //$message['body'][] = t('You have set an order to draft. To view the order, follow this url: !url', array(), array('langcode' => $message['langcode']));
+      break;
+    }
+    case 'draft_submitted': {
+      $message['subject'] = t('Order set to submitted', array(), array('langcode' => $message['langcode']));
+      $message['body'][] = t('You have set an order to submitted: ' . $params['entity']->id(), array(), array('langcode' => $message['langcode']));
+      break;
+    }
+  }
+  //$language_manager->setConfigOverrideLanguage($original_language);
+}
+
+/**
+ * Implements hook_node_access().
+ */
+function emarket_order_node_access(\Drupal\node\NodeInterface $node, $op, \Drupal\Core\Session\AccountInterface $account) {
+  // For orders, any user which has the special link with the hash in it has
+  // access to view and edit.
+  // @todo: the service providers to which this node is assigned also have
+  // access to view it.
+  // @todo: similar access check for order items. Actually, we should maybe
+  //  remove the order item nodes and just use a custom field. But it is true
+  // that the system is much more flexible with nodes. Some for deleting. When
+  // we implement this, then we can update the permissions.
+  if ($op == 'update' || $op == 'view') {
+    $hash = \Drupal::request()->get('order_hash');
+    $valid_hash = emarket_order_get_hash_for_order($node);
+    if ($hash === $valid_hash) {
+      return \Drupal\Core\Access\AccessResult::allowed();
+    }
+  }
+  return \Drupal\Core\Access\AccessResult::neutral();
+}
+
+/**
+ * Helper function to compute the hash for an order.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ */
+function emarket_order_get_hash_for_order(\Drupal\node\NodeInterface $node) {
+  $data = $node->id() . '-' . $node->getCreatedTime();
+  return \Drupal\Component\Utility\Crypt::hashBase64($data, \Drupal\Core\Site\Settings::getHashSalt());
+}
+
+/**
+ * Shutdown callback for notifying about a transition.
+ *
+ * @param $uuid
+ *  The uuid of the entity.
+ * @param $transition_key
+ *  The transition key. @see StateTransitionSubscriber::getInterestedStateTransitions()
+ */
+function emarket_order_notification_shutdown_callback($uuid, $transition_key) {
+  $nodes = Drupal::entityTypeManager()->getStorage('node')->loadByProperties(array('uuid' => $uuid));
+  if (!empty($nodes)) {
+    $node = reset($nodes);
+    emarket_order_notify($node, $transition_key);
+  }
+}
+
+function emarket_order_notify($node, $transition_key) {
+  $recipients = emarket_order_notification_recipients($node, $transition_key);
+  foreach ($recipients as $recipient) {
+    // Currently, we notify only by mail.
+    if ($recipient['type'] == 'mail') {
+      $params = array('entity' => $node);
+      \Drupal::service('plugin.manager.mail')->mail('emarket_order', $transition_key, $recipient['value'], \Drupal::languageManager()->getDefaultLanguage()->getId(), $params);
+    }
+  }
+}
+
+/**
+ * Returns an array with all the notification recipients when a transition
+ * happens for an order.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *  The entity for which the transition is happening.
+ * @param $transition_key
+ *  The key of the transition, @see StateTransitionSubscriber::getInterestedStateTransitions()
+ */
+function emarket_order_notification_recipients(\Drupal\node\NodeInterface $node, $transition_key) {
+  $recipients = array();
+  $author = $node->getOwner();
+  // If the author is anonymous, we will take the e-mail of the node.
+  if ($author->isAnonymous()) {
+    $author_mail = $node->get('field_email')->getValue();
+    $author_mail = $author_mail[0]['value'];
+  }
+  else {
+    $author_mail = $author->getEmail();
+  }
+  switch ($transition_key) {
+    // The case for when the order is created.
+    case 'draft_submitted':
+    case '_draft': {
+      $recipients[] = array(
+        'type' => 'mail',
+        'value' => $author_mail,
+      );
+    }
+  }
+  return $recipients;
+}

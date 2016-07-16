@@ -1,0 +1,8 @@
+uuid: 0cc382f1-dc7c-4ff6-bfd0-1f9e8b063976
+langcode: en
+status: true
+dependencies: {  }
+id: delivery
+label: Delivery
+published: false
+default_revision: false

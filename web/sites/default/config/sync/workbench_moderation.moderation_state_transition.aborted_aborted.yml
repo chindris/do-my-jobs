@@ -1,0 +1,11 @@
+uuid: 7ae102f9-45f1-4f1c-9bd1-dbd3fa177581
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.aborted
+id: aborted_aborted
+label: 'Keep aborted'
+stateFrom: aborted
+stateTo: aborted
+weight: -13

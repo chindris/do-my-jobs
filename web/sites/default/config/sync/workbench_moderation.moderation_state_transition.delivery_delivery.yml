@@ -1,0 +1,11 @@
+uuid: 8a9079bf-5f25-40f7-ae64-795817557d0e
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.delivery
+id: delivery_delivery
+label: 'Keep delivery'
+stateFrom: delivery
+stateTo: delivery
+weight: 6

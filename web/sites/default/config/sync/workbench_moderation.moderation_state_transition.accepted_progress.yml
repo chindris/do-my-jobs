@@ -1,0 +1,12 @@
+uuid: 281e94da-24bf-4fe3-af2b-ff758e95a078
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.accepted
+    - workbench_moderation.moderation_state.progress
+id: accepted_progress
+label: Progress
+stateFrom: accepted
+stateTo: progress
+weight: -9
