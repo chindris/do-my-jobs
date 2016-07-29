@@ -1,0 +1,5 @@
+name: Custom
+type: module
+description: 'Impements custom feature for this project which are not covered in other modules.'
+package: Emarket
+core: 8.x

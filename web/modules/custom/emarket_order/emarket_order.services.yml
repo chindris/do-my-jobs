@@ -3,3 +3,7 @@ services:
     class: '\Drupal\emarket_order\EventSubscriber\StateTransitionSubscriber'
     tags:
       - {name: event_subscriber}
+  emarket_order.route_subscriber:
+      class: Drupal\emarket_order\Routing\RouteSubscriber
+      tags:
+        - { name: event_subscriber }
