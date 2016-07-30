@@ -86,7 +86,7 @@ function emarket_order_form_node_order_edit_form_alter(&$form, \Drupal\Core\Form
 function emarket_order_order_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
   // Also, the title should not be mandatory.
   //$form['title']['widget']['0']['value']['#required'] = FALSE;
-  $form['actions']['submit']['#submit'][] = 'emarket_order_node_order_form_submit';
+  $form['actions']['submit']['#submit'][] = 'emarket_order_form_submit_preserve_hash';
 }
 
 /**
@@ -102,9 +102,45 @@ function emarket_order_node_order_form_submit_redirect(array &$form, \Drupal\Cor
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter() for the comment form.
+ */
+function emarket_order_form_comment_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // For comments on orders or order_items we want to stay on the same page. By
+  // doing this, we are sure that we will not get an access denied after
+  // submission.
+  // Also, we will want to always go to the order view after submission, with an
+  // anchor to the comment, not to the comment full view.
+  /* @var \Drupal\comment\Entity\Comment $comment_entity */
+  $comment_entity = $form_state->getBuildInfo()['callback_object']->getEntity();
+  if ($comment_entity->getCommentedEntityTypeId() == 'node' &&
+    ($comment_entity->getCommentedEntity()->bundle() == 'order' || $comment_entity->getCommentedEntity()->bundle() == 'order_item')) {
+    // @todo: check if this is the right thing to do. Should be checked the case
+    // when the '#action' is not defined for the form and use the same approach.
+    $form['#action'] = \Drupal::request()->getRequestUri();
+    $form['actions']['submit']['#submit'][] = 'emarket_order_comment_form_submit_redirect';
+    $form['actions']['submit']['#submit'][] = 'emarket_order_form_submit_preserve_hash';
+  }
+}
+
+/**
+ * Additional submit handler for the comment forms on order and order items to
+ * redirect the user to the order view page.
+ */
+function emarket_order_comment_form_submit_redirect(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  /* @var \Drupal\comment\Entity\Comment $comment_entity */
+  $comment_entity = $form_state->getBuildInfo()['callback_object']->getEntity();
+  if ($comment_entity->getCommentedEntity()->bundle() == 'order') {
+    $form_state->setRedirect("entity.node.canonical", array('node' => $comment_entity->getCommentedEntity()->id()), array('fragment' => 'comment-' . $comment_entity->id()));
+  }
+  else {
+    // @todo: We will have to first get the order.
+  }
+}
+
+/**
  * Additional submit handler for the order node form.
  */
-function emarket_order_node_order_form_submit(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+function emarket_order_form_submit_preserve_hash(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
   // Preserve the order_hash if we have it in the query.
   $order_hash = \Drupal::request()->get('order_hash');
   if (!empty($order_hash)) {
