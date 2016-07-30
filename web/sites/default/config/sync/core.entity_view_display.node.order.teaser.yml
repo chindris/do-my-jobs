@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.order.comment
     - field.field.node.order.field_email
     - field.field.node.order.field_order_items
     - node.type.order
@@ -19,5 +20,6 @@ content:
   workbench_moderation_control:
     weight: -20
 hidden:
+  comment: true
   field_email: true
   field_order_items: true

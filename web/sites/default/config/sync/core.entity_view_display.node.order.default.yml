@@ -3,24 +3,33 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.order.comment
     - field.field.node.order.field_email
     - field.field.node.order.field_order_items
     - node.type.order
   module:
+    - comment
     - user
 id: node.order.default
 targetEntityType: node
 bundle: order
 mode: default
 content:
+  comment:
+    weight: 4
+    label: above
+    settings:
+      pager_id: 0
+    third_party_settings: {  }
+    type: comment_default
   field_email:
-    weight: 101
+    weight: 2
     label: above
     settings: {  }
     third_party_settings: {  }
     type: basic_string
   field_order_items:
-    weight: 102
+    weight: 3
     label: above
     settings:
       view_mode: full
@@ -28,11 +37,11 @@ content:
     third_party_settings: {  }
     type: entity_reference_entity_view
   links:
-    weight: 100
+    weight: 1
     settings: {  }
     third_party_settings: {  }
   workbench_moderation_control:
-    weight: -20
+    weight: 0
     settings: {  }
     third_party_settings: {  }
 hidden: {  }

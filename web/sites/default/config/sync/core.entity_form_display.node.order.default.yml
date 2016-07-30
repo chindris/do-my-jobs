@@ -3,10 +3,12 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.order.comment
     - field.field.node.order.field_email
     - field.field.node.order.field_order_items
     - node.type.order
   module:
+    - comment
     - inline_entity_form
     - path
     - workbench_moderation
@@ -15,6 +17,11 @@ targetEntityType: node
 bundle: order
 mode: default
 content:
+  comment:
+    weight: 33
+    settings: {  }
+    third_party_settings: {  }
+    type: comment_default
   created:
     type: datetime_timestamp
     weight: 10
