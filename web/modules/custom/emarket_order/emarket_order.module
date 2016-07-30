@@ -6,6 +6,13 @@
  */
 
 /**
+ * @todo: We will have to write our own NodeSelection validator, that extends
+ * the Drupal\node\Plugin\EntityReferenceSelection\NodeSelection so that we can
+ * reference unpublished entities when the users create orders. Until them, we
+ * have to keep the order_item nodes published.
+ */
+
+/**
  * Implements hook_menu_local_tasks_alter().
  */
 function emarket_order_menu_local_tasks_alter(&$data, $route_name) {
@@ -49,7 +56,6 @@ function emarket_order_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $
 
 }
 
-
 /**
  * Implements hook_form_FORM_ID_alter().
  */
@@ -63,6 +69,7 @@ function emarket_order_form_node_order_form_alter(&$form, \Drupal\Core\Form\Form
   } else {
     $form['field_email']['#access'] = FALSE;
   }
+  $form['actions']['submit']['#submit'][] = 'emarket_order_node_order_form_submit_redirect';
   emarket_order_order_form_alter($form, $form_state, $form_id);
 }
 
@@ -80,6 +87,18 @@ function emarket_order_order_form_alter(&$form, \Drupal\Core\Form\FormStateInter
   // Also, the title should not be mandatory.
   //$form['title']['widget']['0']['value']['#required'] = FALSE;
   $form['actions']['submit']['#submit'][] = 'emarket_order_node_order_form_submit';
+}
+
+/**
+ * Submit handler that will set the order hash in the current request upon a
+ * form submission.
+ */
+function emarket_order_node_order_form_submit_redirect(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $node = \Drupal\node\Entity\Node::load($form_state->get('nid'));
+  if (!empty($node)) {
+    emarket_order_set_order_hash_in_request($node);
+    $form_state->setRedirect("entity.node.canonical", array('node' => $node->id()));
+  }
 }
 
 /**
@@ -131,22 +150,99 @@ function emarket_order_mail($key, &$message, $params) {
 }
 
 /**
+ * Implements hook_entity_field_access().
+ */
+function emarket_order_entity_field_access($operation, \Drupal\Core\Field\FieldDefinitionInterface $field_definition, \Drupal\Core\Session\AccountInterface $account, \Drupal\Core\Field\FieldItemListInterface $items = NULL) {
+  // We deny the access to the field_order (which is attached to the order_item
+  // content type) to the users who do not have administer permissions.
+  if ($field_definition->getName() == 'field_order') {
+    // Only the admins can view the field at the moment, but not event they can
+    // edit it.
+    if ($operation == 'view' && $account->hasPermission('administer nodes')) {
+      return \Drupal\Core\Access\AccessResult::allowed();
+    }
+    return \Drupal\Core\Access\AccessResult::forbidden();
+  }
+  return \Drupal\Core\Access\AccessResult::neutral();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function emarket_order_node_insert(\Drupal\node\NodeInterface $node) {
+  // For now, we just need the same things as the update hook does.
+  emarket_order_node_update($node);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for nodes.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ */
+function emarket_order_node_update(\Drupal\node\NodeInterface $node) {
+  // When we update an order, we will check all the order items, and for the
+  // ones which do not have the order reference set, we will update them.
+  // @todo: find a more performant way of doing this.
+  if ($node->bundle() == 'order') {
+    try {
+      $order_items = $node->get('field_order_items')->referencedEntities();
+      if (!empty($order_items)) {
+        foreach ($order_items as $order_item) {
+          $order_reference = $order_item->get('field_order')->getValue();
+          if (empty($order_reference)) {
+            $order_item->get('field_order')->setValue(array('target_id' => $node->id()));
+            $order_item->save();
+          }
+        }
+      }
+    }
+    catch (\InvalidArgumentException $e) {
+      // Do nothing special here, maybe just log it? @todo
+    }
+  }
+}
+
+/**
  * Implements hook_node_access().
  */
 function emarket_order_node_access(\Drupal\node\NodeInterface $node, $op, \Drupal\Core\Session\AccountInterface $account) {
   // For orders, any user which has the special link with the hash in it has
-  // access to view and edit.
+  // access to view, edit or delete. The same for the order item nodes.
   // @todo: the service providers to which this node is assigned also have
   // access to view it.
-  // @todo: similar access check for order items. Actually, we should maybe
-  //  remove the order item nodes and just use a custom field. But it is true
-  // that the system is much more flexible with nodes. Some for deleting. When
-  // we implement this, then we can update the permissions.
-  if ($op == 'update' || $op == 'view') {
-    $hash = \Drupal::request()->get('order_hash');
-    $valid_hash = emarket_order_get_hash_for_order($node);
-    if ($hash === $valid_hash) {
-      return \Drupal\Core\Access\AccessResult::allowed();
+  // @todo: we should maybe remove the order item nodes and just use a custom
+  // field. But it is true that the system is much more flexible with nodes.
+  // Some for deleting. When we implement this, then we can update the
+  // permissions.
+  if ($op == 'update' || $op == 'view' || $op == 'delete') {
+    $node_to_check = NULL;
+    switch ($node->bundle()) {
+      // For order item nodes, we actually have to check the access to their
+      // parent order.
+      case 'order_item': {
+        try {
+          $order_field = $node->get('field_order')->referencedEntities();
+          if (!empty($order_field)) {
+            $node_to_check = $order_field[0];
+          }
+        }
+        catch (\InvalidArgumentException $e) {
+          // Do nothing special here, maybe just log it? @todo
+        }
+        break;
+      }
+      case 'order': {
+        $node_to_check = $node;
+        break;
+      }
+    }
+
+    if (!empty($node_to_check)) {
+      $hash = \Drupal::request()->get('order_hash');
+      $valid_hash = emarket_order_get_hash_for_order($node_to_check);
+      if ($hash === $valid_hash) {
+        return \Drupal\Core\Access\AccessResult::allowed();
+      }
     }
   }
   return \Drupal\Core\Access\AccessResult::neutral();
@@ -156,10 +252,28 @@ function emarket_order_node_access(\Drupal\node\NodeInterface $node, $op, \Drupa
  * Helper function to compute the hash for an order.
  *
  * @param \Drupal\node\NodeInterface $node
+ *  The order node.
  */
 function emarket_order_get_hash_for_order(\Drupal\node\NodeInterface $node) {
   $data = $node->id() . '-' . $node->getCreatedTime();
   return \Drupal\Component\Utility\Crypt::hashBase64($data, \Drupal\Core\Site\Settings::getHashSalt());
+}
+
+/**
+ * Helper function to set the hash of an order in the current request.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ *  The order node.
+ * @param boolean $force_set
+ *  If we should force set the order hash, even if we already have a value.
+ */
+function emarket_order_set_order_hash_in_request(\Drupal\node\NodeInterface $node, $force_set = FALSE) {
+  // First, make sure we do not already have one. If we do have one, just skip
+  // setting it again.
+  $order_hash = \Drupal::request()->get('order_hash');
+  if (empty($order_hash) || $force_set) {
+    \Drupal::request()->query->set('order_hash', emarket_order_get_hash_for_order($node));
+  }
 }
 
 /**

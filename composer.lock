@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "914afbd1c688cce9560f47e329317abf",
-    "content-hash": "7c977ff4a58f152a2fe590867ae33c51",
+    "hash": "8a955bb993481555bee07deade7b3622",
+    "content-hash": "e559399996c7a1f1853d258a6bd3e6d3",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -2212,6 +2212,44 @@
             "description": "Provides a mechanism for modules to automatically generate aliases for the content they manage.",
             "homepage": "https://www.drupal.org/project/pathauto",
             "time": "2016-04-18 18:44:27"
+        },
+        {
+            "name": "drupal/rabbit_hole",
+            "version": "dev-8.x-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/rabbit_hole",
+                "reference": "0ee1fa83c6a02f19ee3977f4be4d5244d59d8d4a"
+            },
+            "require": {
+                "drupal/core": "8.*"
+            },
+            "replace": {
+                "drupal/rh_file": "self.version",
+                "drupal/rh_node": "self.version",
+                "drupal/rh_taxonomy": "self.version",
+                "drupal/rh_user": "self.version"
+            },
+            "suggest": {
+                "drupal/core": "Required by drupal/rh_file, drupal/rh_node, drupal/rh_taxonomy, drupal/rh_user",
+                "drupal/file_entity": "Required by drupal/rh_file",
+                "drupal/node": "Required by drupal/rh_node",
+                "drupal/taxonomy": "Required by drupal/rh_taxonomy",
+                "drupal/user": "Required by drupal/rh_user"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-8.x-1.x": "8.1.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.drupal-composer.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Basic functionality that is shared among the different Rabbit Hole modules.",
+            "homepage": "https://www.drupal.org/project/rabbit_hole",
+            "time": "2016-07-18 00:38:08"
         },
         {
             "name": "drupal/redirect",
@@ -5559,7 +5597,8 @@
     "stability-flags": {
         "cweagans/composer-patches": 20,
         "drupal/config_installer": 20,
-        "drupal/varnish": 20
+        "drupal/varnish": 20,
+        "drupal/rabbit_hole": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

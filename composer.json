@@ -49,7 +49,8 @@
         "drupal/varnish": "dev-amazee",
         "drupal/inline_entity_form": "~8.0",
         "drupal/workbench_moderation": "~8.0",
-        "drupal/drupal-extension": "^3.2"
+        "drupal/drupal-extension": "^3.2",
+        "drupal/rabbit_hole": "dev-8.x-1.x"
     },
     "conflict": {
         "drupal/drupal": "*"
