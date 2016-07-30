@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.order_item.comment
     - field.field.node.order_item.field_description
+    - field.field.node.order_item.field_order
     - field.field.node.order_item.field_quantity
     - node.type.order_item
   module:
@@ -21,6 +22,14 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: string_textarea
+  field_order:
+    weight: 26
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
   field_quantity:
     weight: 1
     settings:

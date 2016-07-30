@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.order_item.comment
     - field.field.node.order_item.field_description
+    - field.field.node.order_item.field_order
     - field.field.node.order_item.field_quantity
     - node.type.order_item
   module:
@@ -23,11 +24,18 @@ content:
     third_party_settings: {  }
     type: comment_default
   field_description:
-    weight: 2
+    weight: 1
     label: above
     settings: {  }
     third_party_settings: {  }
     type: basic_string
+  field_order:
+    weight: 2
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
   field_quantity:
     weight: 0
     label: above
