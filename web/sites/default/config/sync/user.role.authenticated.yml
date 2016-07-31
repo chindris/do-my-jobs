@@ -21,3 +21,6 @@ permissions:
   - 'create order_item content'
   - 'use draft_draft transition'
   - 'use draft_submit transition'
+  - 'view own unpublished content'
+  - 'delete own order_item content'
+  - 'edit own order_item content'
