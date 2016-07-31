@@ -77,7 +77,7 @@ function emarket_order_form_node_order_form_alter(&$form, \Drupal\Core\Form\Form
  * Implements hook_form_FORM_ID_alter().
  */
 function emarket_order_form_node_order_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-  emarket_order_order_form_alter($form, $form_state, $form_id);
+  emarket_order_form_node_order_form_alter($form, $form_state, $form_id);
 }
 
 /**
@@ -105,18 +105,13 @@ function emarket_order_node_order_form_submit_redirect(array &$form, \Drupal\Cor
  * Implements hook_form_FORM_ID_alter() for the comment form.
  */
 function emarket_order_form_comment_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-  // For comments on orders or order_items we want to stay on the same page. By
-  // doing this, we are sure that we will not get an access denied after
-  // submission.
-  // Also, we will want to always go to the order view after submission, with an
-  // anchor to the comment, not to the comment full view.
+  // For comments on orders or order_items we want to always go to the order
+  // view after submission, with an anchor to the comment, not to the comment
+  // full view.
   /* @var \Drupal\comment\Entity\Comment $comment_entity */
   $comment_entity = $form_state->getBuildInfo()['callback_object']->getEntity();
   if ($comment_entity->getCommentedEntityTypeId() == 'node' &&
     ($comment_entity->getCommentedEntity()->bundle() == 'order' || $comment_entity->getCommentedEntity()->bundle() == 'order_item')) {
-    // @todo: check if this is the right thing to do. Should be checked the case
-    // when the '#action' is not defined for the form and use the same approach.
-    $form['#action'] = \Drupal::request()->getRequestUri();
     $form['actions']['submit']['#submit'][] = 'emarket_order_comment_form_submit_redirect';
     $form['actions']['submit']['#submit'][] = 'emarket_order_form_submit_preserve_hash';
   }
@@ -129,11 +124,32 @@ function emarket_order_form_comment_form_alter(&$form, \Drupal\Core\Form\FormSta
 function emarket_order_comment_form_submit_redirect(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
   /* @var \Drupal\comment\Entity\Comment $comment_entity */
   $comment_entity = $form_state->getBuildInfo()['callback_object']->getEntity();
-  if ($comment_entity->getCommentedEntity()->bundle() == 'order') {
-    $form_state->setRedirect("entity.node.canonical", array('node' => $comment_entity->getCommentedEntity()->id()), array('fragment' => 'comment-' . $comment_entity->id()));
+  $commented_entity = $comment_entity->getCommentedEntity();
+  $redirect_options = array(
+    'fragment' => 'comment-' . $comment_entity->id(),
+  );
+  $order_entity = NULL;
+  if ($commented_entity->bundle() == 'order') {
+    $order_entity = $commented_entity;
   }
-  else {
-    // @todo: We will have to first get the order.
+  // Although the only possibility here is to have order or order_item as
+  // bundle, we do the check again to make that clear when reading the code and
+  // also robust for future changes.
+  elseif ($commented_entity->bundle() == 'order_item') {
+    try {
+      $order_entity = emarket_order_get_order_from_order_item($commented_entity);
+    }
+    catch (\InvalidArgumentException $e) {
+      // Do nothing special here, maybe just log it? @todo
+    }
+  }
+  if (!empty($order_entity)) {
+    // We also want to append the hash to the redirect in case the user is not
+    // logged in.
+    if (\Drupal::currentUser()->isAnonymous()) {
+      $redirect_options['query']['order_hash'] = emarket_order_get_hash_for_order($order_entity);
+    }
+    $form_state->setRedirect("entity.node.canonical", array('node' => $order_entity->id()), $redirect_options);
   }
 }
 
@@ -257,10 +273,7 @@ function emarket_order_node_access(\Drupal\node\NodeInterface $node, $op, \Drupa
       // parent order.
       case 'order_item': {
         try {
-          $order_field = $node->get('field_order')->referencedEntities();
-          if (!empty($order_field)) {
-            $node_to_check = $order_field[0];
-          }
+          $node_to_check = emarket_order_get_order_from_order_item($node);
         }
         catch (\InvalidArgumentException $e) {
           // Do nothing special here, maybe just log it? @todo
@@ -310,6 +323,29 @@ function emarket_order_set_order_hash_in_request(\Drupal\node\NodeInterface $nod
   if (empty($order_hash) || $force_set) {
     \Drupal::request()->query->set('order_hash', emarket_order_get_hash_for_order($node));
   }
+}
+
+/**
+ * Helper function to return the order from an order item.
+ *
+ * @param \Drupal\node\NodeInterface $order_item
+ *  The order item node.
+ * @throws \InvalidArgumentException
+ *  Because it calls the Drupal\Core\Entity\FieldableEntityInterface::get()
+ *  which can throw the \InvalidArgumentException when the name of the field
+ *  does not exit. We do not want to catch the exception here because we do not
+ *  want what to do with it, if we should break the execution, log it with a
+ *  specific message, etc... The code which calls
+ *  emarket_order_get_order_from_order_item() is responsible for catching it.
+ * @return \Drupal\node\NodeInterface|NULL
+ *  The order object, if the order item has an order. Otherwise, NULL.
+ */
+function emarket_order_get_order_from_order_item(\Drupal\node\NodeInterface $order_item) {
+  $order_field = $order_item->get('field_order')->referencedEntities();
+  if (!empty($order_field)) {
+    return $order_field[0];
+  }
+  return NULL;
 }
 
 /**
