@@ -8,7 +8,7 @@ dependencies:
     - field.field.node.order.field_order_items
     - node.type.order
   module:
-    - comment
+    - collapsible_comments
     - user
 id: node.order.default
 targetEntityType: node
@@ -21,7 +21,7 @@ content:
     settings:
       pager_id: 0
     third_party_settings: {  }
-    type: comment_default
+    type: collapsible_comments
   field_email:
     weight: 2
     label: above

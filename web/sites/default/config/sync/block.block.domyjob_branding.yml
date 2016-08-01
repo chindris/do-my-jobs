@@ -1,0 +1,23 @@
+uuid: 0e978986-195b-4d26-a8aa-6578be55f21d
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - domyjob
+id: domyjob_branding
+theme: domyjob
+region: content
+weight: -50
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  provider: system
+  label_display: '0'
+  use_site_logo: true
+  use_site_name: true
+  use_site_slogan: true
+visibility: {  }

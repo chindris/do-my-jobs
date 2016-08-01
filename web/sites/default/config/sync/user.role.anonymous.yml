@@ -18,3 +18,4 @@ permissions:
   9: 'use draft_draft transition'
   10: 'use draft_submit transition'
   11: 'use text format basic_html'
+  12: 'access user profiles'

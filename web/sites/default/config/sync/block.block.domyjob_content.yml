@@ -1,0 +1,20 @@
+uuid: 117049f6-0f0c-4864-8903-b547f8738dd6
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - domyjob
+id: domyjob_content
+theme: domyjob
+region: content
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  provider: system
+  label_display: '0'
+visibility: {  }

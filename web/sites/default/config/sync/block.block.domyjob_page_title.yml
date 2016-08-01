@@ -1,0 +1,18 @@
+uuid: 42027ed1-48ec-4409-9789-7ea1f83083f1
+langcode: en
+status: true
+dependencies:
+  theme:
+    - domyjob
+id: domyjob_page_title
+theme: domyjob
+region: content
+weight: -50
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  provider: core
+  label_display: '0'
+visibility: {  }

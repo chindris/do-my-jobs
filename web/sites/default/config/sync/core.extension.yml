@@ -5,6 +5,7 @@ module:
   block_content: 0
   breakpoint: 0
   ckeditor: 0
+  collapsible_comments: 0
   comment: 0
   config: 0
   contextual: 0
@@ -56,3 +57,4 @@ theme:
   beaker: 0
   stable: 0
   bartik: 0
+  domyjob: 0

@@ -9,7 +9,7 @@ dependencies:
     - field.field.node.order_item.field_quantity
     - node.type.order_item
   module:
-    - comment
+    - collapsible_comments
     - user
 id: node.order_item.default
 targetEntityType: node
@@ -17,12 +17,12 @@ bundle: order_item
 mode: default
 content:
   comment:
+    type: collapsible_comments
     weight: 3
     label: above
     settings:
       pager_id: 0
     third_party_settings: {  }
-    type: comment_default
   field_description:
     weight: 1
     label: above

@@ -1,0 +1,20 @@
+uuid: 762a90ee-0131-4ba3-aedb-84244a5ec886
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - domyjob
+id: domyjob_messages
+theme: domyjob
+region: header
+weight: 0
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  provider: system
+  label_display: '0'
+visibility: {  }
