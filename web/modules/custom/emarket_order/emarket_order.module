@@ -156,6 +156,28 @@ function emarket_order_comment_form_submit_redirect(array &$form, \Drupal\Core\F
 }
 
 /**
+ * Implements hook_inline_entity_form_table_fields_alter().
+ */
+function emarket_order_inline_entity_form_table_fields_alter(&$fields, $context) {
+  // For the order items field, we want to add some additional fields to be
+  // displayed in the overview table, as well as remove the status field which
+  // is useless.
+  if ($context['entity_type'] == 'node' && $context['field_name'] == 'field_order_items') {
+    unset($fields['status']);
+    $fields['field_quantity'] = array(
+      'type' => 'field',
+      'label' => t('Quantity'),
+      'weight' => $fields['label']['weight'] + 1,
+    );
+    $fields['field_description'] = array(
+      'type' => 'field',
+      'label' => t('Description'),
+      'weight' => $fields['label']['weight'] + 2,
+    );
+  }
+}
+
+/**
  * Additional submit handler for the order node form.
  */
 function emarket_order_form_submit_preserve_hash(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
