@@ -114,6 +114,8 @@ function emarket_order_form_comment_form_alter(&$form, \Drupal\Core\Form\FormSta
     ($comment_entity->getCommentedEntity()->bundle() == 'order' || $comment_entity->getCommentedEntity()->bundle() == 'order_item')) {
     $form['actions']['submit']['#submit'][] = 'emarket_order_comment_form_submit_redirect';
     $form['actions']['submit']['#submit'][] = 'emarket_order_form_submit_preserve_hash';
+    $form['author']['name']['#access'] = FALSE;
+    $form['subject']['#access'] = FALSE;
   }
 }
 
@@ -214,6 +216,14 @@ function emarket_order_entity_field_access($operation, \Drupal\Core\Field\FieldD
       return \Drupal\Core\Access\AccessResult::allowed();
     }
     return \Drupal\Core\Access\AccessResult::forbidden();
+  }
+  // Also, deny the access to the comment field setting on the node edit form,
+  // as well as to the revision log field.
+  // @todo: should we hide these fields as part of some other module maybe?
+  elseif ($field_definition->getName() == 'comment' || $field_definition->getName() == 'revision_log') {
+    if ($operation == 'edit' && !$account->hasPermission('adminster nodes')) {
+      return \Drupal\Core\Access\AccessResult::forbidden();
+    }
   }
   return \Drupal\Core\Access\AccessResult::neutral();
 }

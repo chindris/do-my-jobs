@@ -1,0 +1,5 @@
+collapsible_comments.ui:
+  js:
+    js/collapsible_comments.ui.js: {}
+  dependencies:
+    - core/jquery
