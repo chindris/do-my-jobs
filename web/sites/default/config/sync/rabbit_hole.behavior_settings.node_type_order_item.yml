@@ -1,0 +1,9 @@
+uuid: 66fdd3d3-77b6-4c10-a930-70bfe6a6327b
+langcode: en
+status: true
+dependencies: {  }
+id: node_type_order_item
+action: access_denied
+allow_override: 0
+redirect: ''
+redirect_code: 301
