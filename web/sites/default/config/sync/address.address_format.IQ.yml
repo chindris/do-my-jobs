@@ -1,0 +1,20 @@
+uuid: dd01193f-3521-4845-b2c7-c3babb6dd6e6
+langcode: en
+status: true
+dependencies: {  }
+countryCode: IQ
+format: "%organization\n%recipient\n%addressLine1\n%addressLine2\n%locality, %administrativeArea\n%postalCode"
+requiredFields:
+  - recipient
+  - addressLine1
+  - locality
+  - administrativeArea
+uppercaseFields:
+  - locality
+  - administrativeArea
+administrativeAreaType: province
+localityType: city
+dependentLocalityType: null
+postalCodeType: postal
+postalCodePattern: '\d{5}'
+postalCodePrefix: null

@@ -1,0 +1,19 @@
+uuid: 635ac8a0-f373-4a5c-91f6-512a6335d381
+langcode: en
+status: true
+dependencies: {  }
+countryCode: NZ
+format: "%recipient\n%organization\n%addressLine1\n%addressLine2\n%dependentLocality\n%locality %postalCode"
+requiredFields:
+  - recipient
+  - addressLine1
+  - locality
+  - postalCode
+uppercaseFields:
+  - locality
+administrativeAreaType: null
+localityType: city
+dependentLocalityType: suburb
+postalCodeType: postal
+postalCodePattern: '\d{4}'
+postalCodePrefix: null

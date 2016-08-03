@@ -5,8 +5,11 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.order.comment
+    - field.field.node.order.field_delivery_address
+    - field.field.node.order.field_delivery_date
     - field.field.node.order.field_email
     - field.field.node.order.field_order_items
+    - field.field.node.order.field_service_provider
     - node.type.order
   module:
     - user
@@ -21,5 +24,8 @@ content:
     weight: -20
 hidden:
   comment: true
+  field_delivery_address: true
+  field_delivery_date: true
   field_email: true
   field_order_items: true
+  field_service_provider: true

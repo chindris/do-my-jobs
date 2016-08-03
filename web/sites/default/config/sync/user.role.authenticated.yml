@@ -26,3 +26,4 @@ permissions:
   17: 'use text format basic_html'
   18: 'access user profiles'
   19: 'delete own order content'
+  20: 'view moderation states'

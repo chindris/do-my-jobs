@@ -1,0 +1,18 @@
+uuid: 36c83385-2ecf-4a4e-a06f-f30b6cb46237
+langcode: en
+status: true
+dependencies: {  }
+countryCode: BY
+format: "%administrativeArea\n%postalCode %locality %sortingCode\n%addressLine2\n%addressLine1\n%organization\n%recipient"
+requiredFields:
+  - recipient
+  - addressLine1
+  - locality
+uppercaseFields:
+  - locality
+administrativeAreaType: province
+localityType: city
+dependentLocalityType: null
+postalCodeType: postal
+postalCodePattern: '\d{6}'
+postalCodePrefix: null

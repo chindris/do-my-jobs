@@ -1,0 +1,24 @@
+uuid: b576415a-cad0-481a-8291-d71b4a987cb7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_delivery_date
+    - node.type.order
+  module:
+    - datetime
+id: node.order.field_delivery_date
+field_name: field_delivery_date
+entity_type: node
+bundle: order
+label: 'Delivery date'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime
