@@ -240,7 +240,9 @@ function emarket_order_entity_field_access($operation, \Drupal\Core\Field\FieldD
     return \Drupal\Core\Access\AccessResult::forbidden();
   }
   // Also, deny the access to the comment field setting on the node edit form,
-  // as well as to the revision log field.
+  // as well as to the revision log field. For the comments field, we do not
+  // want to remove it from the content type form display configuration, admins
+  // should still see that field.
   // @todo: should we hide these fields as part of some other module maybe?
   elseif ($field_definition->getName() == 'comment' || $field_definition->getName() == 'revision_log') {
     if ($operation == 'edit' && !$account->hasPermission('adminster nodes')) {
@@ -323,6 +325,19 @@ function emarket_order_node_access(\Drupal\node\NodeInterface $node, $op, \Drupa
       $valid_hash = emarket_order_get_hash_for_order($node_to_check);
       if ($hash === $valid_hash) {
         return \Drupal\Core\Access\AccessResult::allowed();
+      }
+      // If we are here, we can still allow the user to view the node in case
+      // he is the service provider.
+      if ($op == 'view' && $account->isAuthenticated()) {
+        try {
+          $service_provider = $node_to_check->get('field_service_provider')->referencedEntities();
+          if (!empty($service_provider) && $service_provider[0]->id() == $account->id()) {
+            return \Drupal\Core\Access\AccessResult::allowed();
+          }
+        }
+        catch (\InvalidArgumentException $e) {
+          // Do nothing special here, maybe just log it? @todo
+        }
       }
     }
   }

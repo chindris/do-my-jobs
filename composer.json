@@ -50,7 +50,8 @@
         "drupal/inline_entity_form": "~8.0",
         "drupal/workbench_moderation": "~8.0",
         "drupal/drupal-extension": "^3.2",
-        "drupal/rabbit_hole": "dev-8.x-1.x"
+        "drupal/rabbit_hole": "dev-8.x-1.x",
+        "drupal/address": "^8.1@beta"
     },
     "conflict": {
         "drupal/drupal": "*"
