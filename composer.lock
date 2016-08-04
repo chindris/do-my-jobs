@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "94f9150fe5cd5d700803c293f1f4fe06",
-    "content-hash": "8fbe8ffd70b47e131499ba20279d0334",
+    "hash": "305fbf795496faf80c38564a84ebe52e",
+    "content-hash": "d55b16a80936480a812678c009a06f31",
     "packages": [
         {
             "name": "alchemy/zippy",
@@ -1525,7 +1525,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/address-8.x-1.0-beta3.zip",
-                "reference": null,
+                "reference": "436f4f45c86e1c041110f05f9cfb35ac317f9f52",
                 "shasum": null
             },
             "require": {
@@ -2078,6 +2078,31 @@
                 "web"
             ],
             "time": "2016-06-30 21:12:18"
+        },
+        {
+            "name": "drupal/email_registration",
+            "version": "dev-8.x-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/email_registration",
+                "reference": "319b9ff7474873221d9e5ea6f610fb7c711e6b0e"
+            },
+            "require": {
+                "drupal/core": "8.*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-8.x-1.x": "8.1.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.drupal-composer.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Allows users to register with an e-mail address as their username.",
+            "homepage": "https://www.drupal.org/project/email_registration",
+            "time": "2016-07-15 14:54:31"
         },
         {
             "name": "drupal/entity_reference_revisions",
@@ -5826,7 +5851,8 @@
         "drupal/config_installer": 20,
         "drupal/varnish": 20,
         "drupal/rabbit_hole": 20,
-        "drupal/address": 10
+        "drupal/address": 10,
+        "drupal/email_registration": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
