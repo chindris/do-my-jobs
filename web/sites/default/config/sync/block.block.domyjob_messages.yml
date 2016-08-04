@@ -8,8 +8,8 @@ dependencies:
     - domyjob
 id: domyjob_messages
 theme: domyjob
-region: header
-weight: 0
+region: content
+weight: -3
 provider: null
 plugin: system_messages_block
 settings:

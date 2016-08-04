@@ -7,7 +7,7 @@ dependencies:
 id: domyjob_local_actions
 theme: domyjob
 region: content
-weight: -20
+weight: 2
 provider: null
 plugin: local_actions_block
 settings:

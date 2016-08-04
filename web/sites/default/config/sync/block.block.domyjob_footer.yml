@@ -10,8 +10,8 @@ dependencies:
     - domyjob
 id: domyjob_footer
 theme: domyjob
-region: header
-weight: 0
+region: footer_first
+weight: -5
 provider: null
 plugin: 'system_menu_block:footer'
 settings:

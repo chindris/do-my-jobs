@@ -10,8 +10,8 @@ dependencies:
     - domyjob
 id: domyjob_tools
 theme: domyjob
-region: header
-weight: 0
+region: content
+weight: -4
 provider: null
 plugin: 'system_menu_block:tools'
 settings:

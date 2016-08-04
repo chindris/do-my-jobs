@@ -9,7 +9,7 @@ dependencies:
 id: domyjob_branding
 theme: domyjob
 region: content
-weight: -50
+weight: -1
 provider: null
 plugin: system_branding_block
 settings:
