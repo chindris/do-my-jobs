@@ -48,4 +48,5 @@ content:
       prefix_suffix: true
     third_party_settings: {  }
 hidden:
+  langcode: true
   links: true

@@ -25,6 +25,11 @@ content:
       rows: 3
       placeholder: ''
     third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
   subject:
     type: string_textfield
     weight: 10

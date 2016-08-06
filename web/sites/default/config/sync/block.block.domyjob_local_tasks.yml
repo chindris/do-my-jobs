@@ -7,7 +7,7 @@ dependencies:
 id: domyjob_local_tasks
 theme: domyjob
 region: content
-weight: 0
+weight: -1
 provider: null
 plugin: local_tasks_block
 settings:

@@ -7,7 +7,7 @@ dependencies:
 id: domyjob_page_title
 theme: domyjob
 region: content
-weight: -2
+weight: -3
 provider: null
 plugin: page_title_block
 settings:

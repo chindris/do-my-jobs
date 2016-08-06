@@ -1,0 +1,20 @@
+uuid: 46a3c42d-49bf-4719-b26c-95f42ccf053c
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.order_item
+id: node.order_item.uid
+field_name: uid
+entity_type: node
+bundle: order_item
+label: 'Authored by'
+description: 'The username of the content author.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: 'Drupal\node\Entity\Node::getCurrentUserId'
+settings:
+  handler: default
+  handler_settings: {  }
+field_type: entity_reference

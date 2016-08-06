@@ -9,7 +9,7 @@ dependencies:
 id: domyjob_help
 theme: domyjob
 region: content
-weight: 1
+weight: 0
 provider: null
 plugin: help_block
 settings:

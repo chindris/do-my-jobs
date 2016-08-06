@@ -8,6 +8,7 @@ dependencies:
   module:
     - path
     - text
+    - workbench_moderation
 id: node.page.default
 targetEntityType: node
 bundle: page
@@ -24,6 +25,11 @@ content:
   created:
     type: datetime_timestamp
     weight: 10
+    settings: {  }
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
     settings: {  }
     third_party_settings: {  }
   path:

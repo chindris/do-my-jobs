@@ -47,4 +47,5 @@ content:
     third_party_settings: {  }
     type: number_decimal
 hidden:
+  langcode: true
   links: true
