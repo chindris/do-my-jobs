@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ *  Implements some customizations related to user accounts.
+ */
+
+/**
+ * Implements hook_user_format_name_alter().
+ */
+function account_user_format_name_alter(&$name, $account) {
+  // Show the firstname and the lastname instead of the username property.
+  $name_parts = array();
+  $field_names = array('field_first_name', 'field_last_name');
+  $user_account = \Drupal\user\Entity\User::load($account->id());
+  try {
+    foreach ($field_names as $field_name) {
+      $name_field_value = $user_account->get($field_name)->first();
+      if (!empty($name_field_value)) {
+        $name_parts[] = trim($name_field_value->getValue()['value']);
+      }
+    }
+  }
+  catch (\InvalidArgumentException $e) {
+    // @todo: should never get here, but we should log this.
+  }
+  catch (\Drupal\Core\TypedData\Exception\MissingDataException $e) {
+    // @todo: log this.
+  }
+  $name = implode(' ', $name_parts);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function account_form_user_register_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // For now, we can only register as service providers.
+  // We have to do this flexible for the future.
+  $role_id = \Drupal::request()->get('role');
+  if (!empty($role_id) && $role_id == 'service_provider') {
+    $form['account']['roles']['#default_value'][] = $role_id;
+  }
+}
