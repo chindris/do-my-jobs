@@ -169,10 +169,15 @@ function emarket_order_inline_entity_form_table_fields_alter(&$fields, $context)
       'label' => t('Quantity'),
       'weight' => $fields['label']['weight'] + 1,
     );
+    $fields['field_store'] = array(
+      'type' => 'field',
+      'label' => t('Store'),
+      'weight' => $fields['label']['weight'] + 2,
+    );
     $fields['field_description'] = array(
       'type' => 'field',
       'label' => t('Description'),
-      'weight' => $fields['label']['weight'] + 2,
+      'weight' => $fields['label']['weight'] + 3,
     );
   }
 }

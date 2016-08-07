@@ -27,7 +27,9 @@ function account_user_format_name_alter(&$name, $account) {
   catch (\Drupal\Core\TypedData\Exception\MissingDataException $e) {
     // @todo: log this.
   }
-  $name = implode(' ', $name_parts);
+  if (!empty($name_parts)) {
+    $name = implode(' ', $name_parts);
+  }
 }
 
 /**
