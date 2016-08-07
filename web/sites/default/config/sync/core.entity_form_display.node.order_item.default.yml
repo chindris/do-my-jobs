@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.order_item.field_description
     - field.field.node.order_item.field_order
     - field.field.node.order_item.field_quantity
+    - field.field.node.order_item.field_store
     - node.type.order_item
   module:
     - workbench_moderation
@@ -23,7 +24,7 @@ content:
     third_party_settings: {  }
     type: string_textarea
   field_order:
-    weight: 26
+    weight: 4
     settings:
       match_operator: CONTAINS
       size: 60
@@ -36,9 +37,17 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: number
+  field_store:
+    weight: 2
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
   langcode:
     type: language_select
-    weight: 2
+    weight: 5
     settings: {  }
     third_party_settings: {  }
   title:

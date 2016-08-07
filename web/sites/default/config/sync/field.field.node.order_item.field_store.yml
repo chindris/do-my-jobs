@@ -1,0 +1,28 @@
+uuid: 07efc7f7-5194-4d72-8f44-390e2a192f31
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_store
+    - node.type.order_item
+    - taxonomy.vocabulary.stores
+id: node.order_item.field_store
+field_name: field_store
+entity_type: node
+bundle: order_item
+label: Store
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      stores: stores
+    sort:
+      field: _none
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

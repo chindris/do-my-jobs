@@ -24,34 +24,35 @@ mode: default
 content:
   comment:
     type: comment_default
-    weight: 11
+    weight: 12
     settings: {  }
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 2
+    weight: 3
     settings: {  }
     third_party_settings: {  }
   field_delivery_address:
-    weight: 10
+    weight: 8
     settings:
       default_country: null
     third_party_settings: {  }
     type: address_default
   field_delivery_date:
-    weight: 9
+    weight: 11
     settings: {  }
     third_party_settings: {  }
     type: datetime_default
   field_email:
-    weight: 6
+    weight: 7
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
     type: email_default
   field_order_items:
-    weight: 7
+    type: inline_entity_form_complex
+    weight: 9
     settings:
       form_mode: default
       override_labels: true
@@ -61,9 +62,8 @@ content:
       match_operator: CONTAINS
       allow_existing: false
     third_party_settings: {  }
-    type: inline_entity_form_complex
   field_service_provider:
-    weight: 8
+    weight: 10
     settings:
       match_operator: CONTAINS
       size: 60
@@ -77,20 +77,20 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 5
+    weight: 6
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 3
+    weight: 4
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 4
+    weight: 5
     third_party_settings: {  }
   title:
     type: string_textfield
