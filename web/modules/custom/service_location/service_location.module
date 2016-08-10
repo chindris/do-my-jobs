@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ *  Implements features related to the service locations (like stores).
+ */
+
+define('SERVICE_LOCATION_GOOGLE_API_KEY', 'AIzaSyCW1iBNrQpUyut1pGPNjCl63oXnMNniM4M');
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function service_location_field_widget_form_alter(&$element, \Drupal\Core\Form\FormStateInterface $form_state, $context) {
+  $field_definition = $context['items']->getFieldDefinition();
+  if (in_array($field_definition->getName(), service_location_field_names())) {
+    $element['search_place'] = array(
+      '#type' => 'item',
+      '#markup' => '<div class="find-location-link">' . \Drupal\Core\Link::fromTextAndUrl(t('Find store'), \Drupal\Core\Url::fromUserInput('#find'))->toString() . '</div>',
+      '#attached' => array(
+        'library' => array(
+          'service_location/location_finder'
+        ),
+      ),
+    );
+    service_location_add_places_js_library();
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function service_location_page_attachments(array &$page) {
+  // @todo: this needs to be refactored asap, so that we do not load the google
+  // library on all the pages!
+  if (service_location_add_places_js_library(TRUE) || 1) {
+    $page['#attached']['html_head'][] = array(
+      array(
+        '#type' => 'html_tag',
+        '#tag' => 'script',
+        // @todo: make this configurable.
+        '#attributes' => array('src' => 'https://maps.googleapis.com/maps/api/js?key=' . SERVICE_LOCATION_GOOGLE_API_KEY . '&libraries=places'),
+      ),
+      'google_places_api'
+    );
+  }
+}
+
+/**
+ * Returns an array with the field names for which we should enable the google
+ * places search api.
+ *
+ * @return array
+ */
+function service_location_field_names() {
+  return array('field_store');
+}
+
+/**
+ * Sets/gets the flag for adding the google places api js.
+ *
+ * @param bool $get
+ *  If TRUE, then it will return the flag. Otherwise, it will set the flag to
+ *  TRUE.
+ *
+ * @return bool
+ */
+function service_location_add_places_js_library($get = FALSE) {
+  $add_js = &drupal_static(__FUNCTION__);
+  if (empty($get)) {
+    $add_js = TRUE;
+  }
+  return $add_js;
+}

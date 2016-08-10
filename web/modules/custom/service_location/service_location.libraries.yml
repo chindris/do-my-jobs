@@ -1,0 +1,9 @@
+location_finder:
+  css:
+    layout:
+      css/location_finder.css: {}
+  js:
+    js/location_finder.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once

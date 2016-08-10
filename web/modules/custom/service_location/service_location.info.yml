@@ -1,0 +1,5 @@
+name: Service location
+type: module
+description: 'Implements features related to the service locations (like stores).'
+package: Emarket
+core: 8.x
