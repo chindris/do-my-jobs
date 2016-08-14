@@ -401,6 +401,20 @@ function emarket_order_get_order_from_order_item(\Drupal\node\NodeInterface $ord
 }
 
 /**
+ * Implements hook_workbench_moderation_valid_transitions_alter().
+ */
+function emarket_order_workbench_moderation_valid_transitions_alter(array &$transitions, \Drupal\Core\Entity\ContentEntityInterface $entity, \Drupal\Core\Session\AccountInterface $user) {
+  // We do out alteration only for order items. We will have to check if the
+  // account is the owner or the service provider of the entity. Based on this,
+  // we will have to unset different transitions.
+  if ($entity->getEntityTypeId() == 'node' && $entity->bundle() == 'order') {
+    /*if (!empty($transitions['draft_submit'])) {
+      unset($transitions['draft_submit']);
+    }*/
+  }
+}
+
+/**
  * Shutdown callback for notifying about a transition.
  *
  * @param $uuid
