@@ -74,6 +74,14 @@
         ]
     },
     "extra": {
+        "patches": {
+            "drupal/metatag": {
+                "DrupalConsole integration breaks Drush": "patches/contrib/metatag/metatag-deactivate_drupalconsole_services_0.patch"
+            },
+            "drupal/rabbit_hole": {
+                "TypeError when editing content type settings - 2780501": "patches/contrib/rabbit_hole/typeerror-on-ct-settings-2780501-2.patch"
+            }
+        },
         "installer-paths": {
             "web/core": ["type:drupal-core"],
             "web/modules/contrib/{$name}": ["type:drupal-module"],
