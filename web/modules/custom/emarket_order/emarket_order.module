@@ -234,27 +234,46 @@ function emarket_order_mail($key, &$message, $params) {
  * Implements hook_entity_field_access().
  */
 function emarket_order_entity_field_access($operation, \Drupal\Core\Field\FieldDefinitionInterface $field_definition, \Drupal\Core\Session\AccountInterface $account, \Drupal\Core\Field\FieldItemListInterface $items = NULL) {
-  // We deny the access to the field_order (which is attached to the order_item
-  // content type) to the users who do not have administer permissions.
-  if ($field_definition->getName() == 'field_order') {
-    // Only the admins can view the field at the moment, but not event they can
-    // edit it.
-    if ($operation == 'view' && $account->hasPermission('administer nodes')) {
-      return \Drupal\Core\Access\AccessResult::allowed();
-    }
-    return \Drupal\Core\Access\AccessResult::forbidden();
-  }
-  // Also, deny the access to the comment field setting on the node edit form,
-  // as well as to the revision log field. For the comments field, we do not
-  // want to remove it from the content type form display configuration, admins
-  // should still see that field.
-  // @todo: should we hide these fields as part of some other module maybe?
-  elseif ($field_definition->getName() == 'comment' || $field_definition->getName() == 'revision_log') {
-    if ($operation == 'edit' && !$account->hasPermission('adminster nodes')) {
+  switch ($field_definition->getName()) {
+    // We deny the access to the field_order (which is attached to the
+    // order_item content type) to the users who do not have administer
+    // permissions.
+    case 'field_order': {
+      // Only the admins can view the field at the moment, but not event they
+      // can edit it.
+      if ($operation == 'view' && $account->hasPermission('administer nodes')) {
+        return \Drupal\Core\Access\AccessResult::allowed();
+      }
       return \Drupal\Core\Access\AccessResult::forbidden();
+      break;
+    }
+    case 'comment':
+    case 'revision_log': {
+      // Also, deny the access to the comment field setting on the node edit
+      // form, as well as to the revision log field. For the comments field, we
+      // do not want to remove it from the content type form display
+      // configuration, admins should still see that field.
+      if ($operation == 'edit' && !$account->hasPermission('adminster nodes')) {
+        return \Drupal\Core\Access\AccessResult::forbidden();
+      }
+      break;
     }
   }
   return \Drupal\Core\Access\AccessResult::neutral();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function emarket_order_node_presave(\Drupal\node\NodeInterface $node) {
+  // For new orders, if the user is authenticated, then we directly set them as
+  // confirmed.
+  if ($node->isNew() && $node->bundle() == 'order') {
+    $author = $node->getRevisionAuthor();
+    if ($author->isAuthenticated()) {
+      $node->set('field_order_confirmed', 1);
+    }
+  }
 }
 
 /**
@@ -404,13 +423,17 @@ function emarket_order_get_order_from_order_item(\Drupal\node\NodeInterface $ord
  * Implements hook_workbench_moderation_valid_transitions_alter().
  */
 function emarket_order_workbench_moderation_valid_transitions_alter(array &$transitions, \Drupal\Core\Entity\ContentEntityInterface $entity, \Drupal\Core\Session\AccountInterface $user) {
-  // We do out alteration only for order items. We will have to check if the
+  // We do our alteration only for order items. We will have to check if the
   // account is the owner or the service provider of the entity. Based on this,
   // we will have to unset different transitions.
-  if ($entity->getEntityTypeId() == 'node' && $entity->bundle() == 'order') {
-    /*if (!empty($transitions['draft_submit'])) {
-      unset($transitions['draft_submit']);
-    }*/
+  if ($entity->getEntityTypeId() == 'node' && $entity->bundle() == 'order' && !$user->hasPermission('administer nodes')) {
+    $user_role = emarket_order_get_role_for_order($entity, $user);
+    $valid_transitions = emarket_order_get_valid_transitions_per_user_role($user_role, $entity);
+    if (empty($valid_transitions)) {
+      $valid_transitions = array();
+    }
+
+    $transitions = array_intersect_key($transitions, array_flip($valid_transitions));
   }
 }
 
@@ -472,4 +495,94 @@ function emarket_order_notification_recipients(\Drupal\node\NodeInterface $node,
     }
   }
   return $recipients;
+}
+
+/**
+ * Returns the role of an user in the context of an order.
+ *
+ * @param \Drupal\user\EntityOwnerInterface $order
+ *  The node order object.
+ * @param \Drupal\Core\Session\AccountInterface $user
+ *  The user account object.
+ * @return string|FALSE
+ *  The role name, which can be 'author' or 'service_provider', or 'none' if
+ *  the role could not be identified.
+ */
+function emarket_order_get_role_for_order(\Drupal\Core\Entity\ContentEntityInterface $order, \Drupal\Core\Session\AccountInterface $user) {
+  // For the case when we create an order, or the owner id matches, we return
+  // 'author'.
+  if ($order instanceof \Drupal\user\EntityOwnerInterface && ($order->getOwner()->isAnonymous() || $order->getOwner()->id() === $user->id())) {
+    return 'author';
+  }
+  // Otherwise, check if the user is the service provider.
+  elseif ($order->hasField('field_service_provider')) {
+    $service_provider = $order->get('field_service_provider')->referencedEntities();
+    if (!empty($service_provider) && $service_provider[0]->id() == $user->id()) {
+      return 'service_provider';
+    }
+  }
+  // By default, we return the 'none' string.
+  return 'none';
+}
+
+/**
+ * Returns a map with the valid transitions for specific user roles.
+ *
+ * These roles are however not platform roles. For the moment, there are only 2
+ * possible: 'author' and 'service_provider'. They make sense only in the
+ * context of an entity.
+ *
+ * @param string $role
+ *  The role name. Can be 'author' or 'service_provider' for the moment.
+ * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+ *  Optiona, The entity for which we get the transitions.
+ *
+ * @return array
+ *  The array has as key the user role, and as values an array with valid
+ *  transitions.
+ */
+function emarket_order_get_valid_transitions_per_user_role($role, \Drupal\Core\Entity\ContentEntityInterface $entity = NULL) {
+  $transitions = array(
+    'author' => array(
+      'draft_draft',
+      'draft_submit',
+      'submitted_draft',
+      'submitted_submitted',
+      'submitted_aborted',
+      'accepted_aborted',
+      'needs_clarification_draft',
+      'needs_clarification_submited',
+      'needs_clarification_aborted',
+      'rejected_draft',
+      'rejected_submitted',
+      'rejected_aborted',
+    ),
+    'service_provider' => array(
+      'submitted_accepted',
+      'submitted_needs_clarification',
+      'submitted_rejected',
+      'accepted_accepted',
+      'accepted_needs_clarification',
+      'accepted_rejected',
+      'accepted_progress',
+      'needs_clarification_accepted',
+      'needs_clarification_needs_clarification',
+      'needs_clarification_rejected',
+      'progress_needs_clarification',
+      'progress_delivery',
+      'delivery_done',
+    ),
+  );
+  // @todo: does this code really belong here?
+  // @todo: checking the anonymous user here is a bit hack-ish.
+  if (\Drupal::currentUser()->isAnonymous() && !empty($entity) && $entity->hasField('field_order_confirmed')) {
+    $confirmed = $entity->get('field_order_confirmed')->getValue();
+    // If the order is not yet confirmed, then the only available transition
+    // should be for author to be able to create a draft.
+    if (empty($confirmed['value'])) {
+      $transitions['author'] = array('draft_draft');
+      unset($transitions['service_provider']);
+    }
+  }
+  return !empty($role) ? $transitions[$role] : $transitions;
 }
