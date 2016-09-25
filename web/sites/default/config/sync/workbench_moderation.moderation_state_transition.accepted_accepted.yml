@@ -8,4 +8,4 @@ id: accepted_accepted
 label: 'Keep accepted'
 stateFrom: accepted
 stateTo: accepted
-weight: -10
+weight: -11

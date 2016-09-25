@@ -9,4 +9,4 @@ id: delivery_done
 label: Done
 stateFrom: delivery
 stateTo: done
-weight: 7
+weight: 8

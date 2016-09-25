@@ -8,4 +8,4 @@ id: submitted_submitted
 label: 'Keep submitted'
 stateFrom: submitted
 stateTo: submitted
-weight: -16
+weight: -17

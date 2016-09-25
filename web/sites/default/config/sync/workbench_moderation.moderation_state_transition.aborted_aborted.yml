@@ -8,4 +8,4 @@ id: aborted_aborted
 label: 'Keep aborted'
 stateFrom: aborted
 stateTo: aborted
-weight: -13
+weight: -12

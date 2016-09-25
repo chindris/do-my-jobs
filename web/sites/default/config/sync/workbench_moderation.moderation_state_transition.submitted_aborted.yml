@@ -9,4 +9,4 @@ id: submitted_aborted
 label: Abort
 stateFrom: submitted
 stateTo: aborted
-weight: -15
+weight: -16

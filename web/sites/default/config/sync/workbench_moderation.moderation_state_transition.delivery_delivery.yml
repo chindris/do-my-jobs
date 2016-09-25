@@ -8,4 +8,4 @@ id: delivery_delivery
 label: 'Keep delivery'
 stateFrom: delivery
 stateTo: delivery
-weight: 6
+weight: 7

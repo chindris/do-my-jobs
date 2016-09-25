@@ -9,4 +9,4 @@ id: accepted_progress
 label: Progress
 stateFrom: accepted
 stateTo: progress
-weight: -9
+weight: -10

@@ -9,4 +9,4 @@ id: accepted_rejected
 label: Reject
 stateFrom: accepted
 stateTo: rejected
-weight: -7
+weight: -8

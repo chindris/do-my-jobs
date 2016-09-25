@@ -9,4 +9,4 @@ id: rejected_aborted
 label: Abort
 stateFrom: rejected
 stateTo: aborted
-weight: 0
+weight: 1

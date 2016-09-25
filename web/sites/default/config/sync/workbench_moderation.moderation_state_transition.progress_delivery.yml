@@ -9,4 +9,4 @@ id: progress_delivery
 label: Delivery
 stateFrom: progress
 stateTo: delivery
-weight: 5
+weight: 6

@@ -7,7 +7,9 @@ dependencies:
     - field.field.node.order.field_delivery_address
     - field.field.node.order.field_delivery_date
     - field.field.node.order.field_email
+    - field.field.node.order.field_order_confirmed
     - field.field.node.order.field_order_items
+    - field.field.node.order.field_phone
     - field.field.node.order.field_service_provider
     - node.type.order
   module:
@@ -16,6 +18,7 @@ dependencies:
     - datetime
     - inline_entity_form
     - path
+    - telephone
     - workbench_moderation
 id: node.order.default
 targetEntityType: node
@@ -24,7 +27,7 @@ mode: default
 content:
   comment:
     type: comment_default
-    weight: 12
+    weight: 13
     settings: {  }
     third_party_settings: {  }
   created:
@@ -39,7 +42,7 @@ content:
     third_party_settings: {  }
     type: address_default
   field_delivery_date:
-    weight: 11
+    weight: 12
     settings: {  }
     third_party_settings: {  }
     type: datetime_default
@@ -52,7 +55,7 @@ content:
     type: email_default
   field_order_items:
     type: inline_entity_form_complex
-    weight: 9
+    weight: 10
     settings:
       form_mode: default
       override_labels: true
@@ -62,8 +65,14 @@ content:
       match_operator: CONTAINS
       allow_existing: false
     third_party_settings: {  }
+  field_phone:
+    weight: 9
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: telephone_default
   field_service_provider:
-    weight: 10
+    weight: 11
     settings:
       match_operator: CONTAINS
       size: 60
@@ -107,4 +116,5 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  field_order_confirmed: true

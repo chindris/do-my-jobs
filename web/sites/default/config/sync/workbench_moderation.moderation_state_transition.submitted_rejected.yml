@@ -9,4 +9,4 @@ id: submitted_rejected
 label: Reject
 stateFrom: submitted
 stateTo: rejected
-weight: -11
+weight: -13

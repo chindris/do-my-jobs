@@ -51,3 +51,8 @@ permissions:
   42: 'use accepted_rejected transition'
   43: 'use rejected_draft transition'
   44: 'use needs_clarification_submited transition'
+  45: 'use accepted_aborted transition'
+  46: 'use submitted_draft transition'
+  47: 'use needs_clarification_draft transition'
+  48: 'use rejected_submitted transition'
+  49: 'use needs_review_draft transition'

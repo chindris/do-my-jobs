@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.order.field_delivery_address
     - field.field.node.order.field_delivery_date
     - field.field.node.order.field_email
+    - field.field.node.order.field_order_confirmed
     - field.field.node.order.field_order_items
     - field.field.node.order.field_service_provider
     - node.type.order
@@ -27,6 +28,7 @@ hidden:
   field_delivery_address: true
   field_delivery_date: true
   field_email: true
+  field_order_confirmed: true
   field_order_items: true
   field_service_provider: true
   langcode: true

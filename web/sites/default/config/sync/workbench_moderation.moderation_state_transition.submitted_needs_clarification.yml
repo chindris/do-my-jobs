@@ -9,4 +9,4 @@ id: submitted_needs_clarification
 label: 'Needs clarification'
 stateFrom: submitted
 stateTo: needs_clarification
-weight: -12
+weight: -14

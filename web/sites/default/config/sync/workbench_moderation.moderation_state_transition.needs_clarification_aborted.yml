@@ -9,4 +9,4 @@ id: needs_clarification_aborted
 label: Abort
 stateFrom: needs_clarification
 stateTo: aborted
-weight: -3
+weight: -2

@@ -9,4 +9,4 @@ id: rejected_draft
 label: 'Send back to Draft'
 stateFrom: rejected
 stateTo: draft
-weight: 1
+weight: 2

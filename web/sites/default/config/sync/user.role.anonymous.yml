@@ -43,3 +43,8 @@ permissions:
   34: 'use accepted_rejected transition'
   35: 'use rejected_draft transition'
   36: 'use needs_clarification_submited transition'
+  37: 'use accepted_aborted transition'
+  38: 'use submitted_draft transition'
+  39: 'use needs_clarification_draft transition'
+  40: 'use rejected_submitted transition'
+  41: 'use needs_review_draft transition'

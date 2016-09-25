@@ -9,4 +9,4 @@ id: submitted_accepted
 label: Accept
 stateFrom: submitted
 stateTo: accepted
-weight: -14
+weight: -15

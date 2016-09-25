@@ -8,4 +8,4 @@ id: needs_clarification_needs_clarification
 label: 'Keep needs clarification'
 stateFrom: needs_clarification
 stateTo: needs_clarification
-weight: -6
+weight: -5

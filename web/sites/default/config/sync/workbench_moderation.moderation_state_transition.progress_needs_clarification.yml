@@ -9,4 +9,4 @@ id: progress_needs_clarification
 label: 'Needs clarification'
 stateFrom: progress
 stateTo: needs_clarification
-weight: 3
+weight: 4

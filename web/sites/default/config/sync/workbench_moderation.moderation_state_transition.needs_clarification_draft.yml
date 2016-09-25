@@ -1,0 +1,12 @@
+uuid: 43ffdded-2d34-4a6c-a16f-9bd5696d51f2
+langcode: en
+status: true
+dependencies:
+  config:
+    - workbench_moderation.moderation_state.draft
+    - workbench_moderation.moderation_state.needs_clarification
+id: needs_clarification_draft
+label: 'Back to draft'
+stateFrom: needs_clarification
+stateTo: draft
+weight: -6

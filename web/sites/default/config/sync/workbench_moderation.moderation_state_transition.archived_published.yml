@@ -11,4 +11,4 @@ id: archived_published
 label: Un-archive
 stateFrom: archived
 stateTo: published
-weight: 17
+weight: 18

@@ -9,4 +9,4 @@ id: needs_clarification_rejected
 label: Reject
 stateFrom: needs_clarification
 stateTo: rejected
-weight: -2
+weight: -1

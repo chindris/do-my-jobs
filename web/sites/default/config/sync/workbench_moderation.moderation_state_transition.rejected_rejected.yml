@@ -8,4 +8,4 @@ id: rejected_rejected
 label: 'Keep rejected'
 stateFrom: rejected
 stateTo: rejected
-weight: -1
+weight: 0

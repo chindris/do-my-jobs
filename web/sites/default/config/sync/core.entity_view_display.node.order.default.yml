@@ -7,7 +7,9 @@ dependencies:
     - field.field.node.order.field_delivery_address
     - field.field.node.order.field_delivery_date
     - field.field.node.order.field_email
+    - field.field.node.order.field_order_confirmed
     - field.field.node.order.field_order_items
+    - field.field.node.order.field_phone
     - field.field.node.order.field_service_provider
     - node.type.order
   module:
@@ -55,6 +57,12 @@ content:
       link: false
     third_party_settings: {  }
     type: entity_reference_entity_view
+  field_phone:
+    weight: 6
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
   field_service_provider:
     weight: 3
     label: above
@@ -63,6 +71,7 @@ content:
     third_party_settings: {  }
     type: entity_reference_label
 hidden:
+  field_order_confirmed: true
   langcode: true
   links: true
   workbench_moderation_control: true

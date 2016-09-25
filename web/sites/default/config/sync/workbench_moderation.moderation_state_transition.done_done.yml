@@ -8,4 +8,4 @@ id: done_done
 label: 'Keep done'
 stateFrom: done
 stateTo: done
-weight: 8
+weight: 9
