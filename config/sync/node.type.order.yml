@@ -1,0 +1,29 @@
+uuid: be17d748-5941-4242-9c73-ae105148d7db
+langcode: en
+status: true
+dependencies:
+  module:
+    - content_moderation
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  content_moderation:
+    enabled: true
+    allowed_moderation_states:
+      - published
+      - accepted
+      - canceled
+      - done
+      - draft
+      - rejected
+      - submitted
+    default_moderation_state: draft
+name: Order
+type: order
+description: 'Stores the information about orders.'
+help: ''
+new_revision: true
+preview_mode: 0
+display_submitted: false

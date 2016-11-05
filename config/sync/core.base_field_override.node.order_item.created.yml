@@ -1,0 +1,18 @@
+uuid: 87a05224-869f-4b50-8e34-1e6eba15c948
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.order_item
+id: node.order_item.created
+field_name: created
+entity_type: node
+bundle: order_item
+label: 'Authored on'
+description: 'The time that the node was created.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: created

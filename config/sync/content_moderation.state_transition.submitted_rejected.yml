@@ -1,0 +1,12 @@
+uuid: 86143931-c3d0-42d2-aeff-a58837132f22
+langcode: en
+status: true
+dependencies:
+  config:
+    - content_moderation.state.rejected
+    - content_moderation.state.submitted
+id: submitted_rejected
+label: Reject
+stateFrom: submitted
+stateTo: rejected
+weight: -6

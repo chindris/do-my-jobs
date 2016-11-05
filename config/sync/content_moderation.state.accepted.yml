@@ -1,0 +1,9 @@
+uuid: 9e48a9ee-6e96-4439-bd10-c968c529d0ce
+langcode: en
+status: true
+dependencies: {  }
+id: accepted
+label: Accepted
+published: false
+default_revision: false
+weight: -8

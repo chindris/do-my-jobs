@@ -1,0 +1,16 @@
+uuid: d9980826-d2e4-4d16-8857-1054b7537f4d
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.order_item
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+id: node.order_item
+target_entity_type_id: node
+target_bundle: order_item
+default_langcode: site_default
+language_alterable: false

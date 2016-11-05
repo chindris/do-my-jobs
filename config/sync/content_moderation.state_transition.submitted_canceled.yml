@@ -1,0 +1,12 @@
+uuid: 47d50088-3651-43c8-8775-553024958bc5
+langcode: en
+status: true
+dependencies:
+  config:
+    - content_moderation.state.canceled
+    - content_moderation.state.submitted
+id: submitted_canceled
+label: Cancel
+stateFrom: submitted
+stateTo: canceled
+weight: -5

@@ -1,0 +1,12 @@
+uuid: c5f5ff81-9ce3-46db-95ca-22cb1db2999c
+langcode: en
+status: true
+dependencies:
+  config:
+    - content_moderation.state.draft
+    - content_moderation.state.rejected
+id: rejected_draft
+label: 'Create New Draft'
+stateFrom: rejected
+stateTo: draft
+weight: -10

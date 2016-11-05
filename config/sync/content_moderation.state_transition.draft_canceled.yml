@@ -1,0 +1,12 @@
+uuid: c9243ba6-8522-463a-a4c4-925a92dcfed0
+langcode: en
+status: true
+dependencies:
+  config:
+    - content_moderation.state.canceled
+    - content_moderation.state.draft
+id: draft_canceled
+label: Cancel
+stateFrom: draft
+stateTo: canceled
+weight: -8

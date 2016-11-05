@@ -1,0 +1,11 @@
+uuid: 5cbe8194-8176-4d2f-8f15-e7d3b2c0c127
+langcode: en
+status: true
+dependencies:
+  config:
+    - content_moderation.state.accepted
+id: accepted_accepted
+label: 'Keep accepted'
+stateFrom: accepted
+stateTo: accepted
+weight: -10

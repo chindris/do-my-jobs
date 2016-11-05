@@ -1,0 +1,12 @@
+uuid: fc041845-39fd-4c5d-ba92-655e3cc10500
+langcode: en
+status: true
+dependencies:
+  config:
+    - content_moderation.state.accepted
+    - content_moderation.state.done
+id: accepted_done
+label: Done
+stateFrom: accepted
+stateTo: done
+weight: -8

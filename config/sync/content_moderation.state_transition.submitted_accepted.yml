@@ -1,0 +1,12 @@
+uuid: 8c695850-ebd9-4061-bbf6-0fea5d31b647
+langcode: en
+status: true
+dependencies:
+  config:
+    - content_moderation.state.accepted
+    - content_moderation.state.submitted
+id: submitted_accepted
+label: Accept
+stateFrom: submitted
+stateTo: accepted
+weight: -9

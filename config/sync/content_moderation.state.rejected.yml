@@ -1,0 +1,9 @@
+uuid: 2b361f92-2342-4eaf-9466-58e5a7138b0d
+langcode: en
+status: true
+dependencies: {  }
+id: rejected
+label: Rejected
+published: false
+default_revision: false
+weight: null

@@ -1,0 +1,20 @@
+uuid: 18eaf0ab-2b40-4c4b-9f03-d31a77a52929
+langcode: en
+status: true
+dependencies:
+  theme:
+    - domyjob
+id: domyjob_local_tasks
+theme: domyjob
+region: content
+weight: -1
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  provider: core
+  label_display: '0'
+  primary: true
+  secondary: true
+visibility: {  }

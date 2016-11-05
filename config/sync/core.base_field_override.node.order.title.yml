@@ -1,0 +1,18 @@
+uuid: 9f34bf30-799c-4b8b-9a80-570dc2410a33
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.order
+id: node.order.title
+field_name: title
+entity_type: node
+bundle: order
+label: Title
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

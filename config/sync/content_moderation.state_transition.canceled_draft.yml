@@ -1,0 +1,12 @@
+uuid: c7be8266-fe88-48b3-9a49-48a02b7ff569
+langcode: en
+status: true
+dependencies:
+  config:
+    - content_moderation.state.canceled
+    - content_moderation.state.draft
+id: canceled_draft
+label: 'Create New Draft'
+stateFrom: canceled
+stateTo: draft
+weight: -10

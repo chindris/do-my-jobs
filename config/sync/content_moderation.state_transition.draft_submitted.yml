@@ -1,0 +1,12 @@
+uuid: d396401f-388e-4c7d-9fed-7f3e54d39536
+langcode: en
+status: true
+dependencies:
+  config:
+    - content_moderation.state.draft
+    - content_moderation.state.submitted
+id: draft_submitted
+label: Submit
+stateFrom: draft
+stateTo: submitted
+weight: -9
