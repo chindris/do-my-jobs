@@ -8,4 +8,4 @@
 
 $settings['hash_salt'] = 'CHANGEME';
 
-$config_directories['sync'] = 'sites/default/config/sync';
+$config_directories['sync'] = '../config/sync';

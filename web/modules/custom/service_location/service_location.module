@@ -22,7 +22,7 @@ function service_location_field_widget_form_alter(&$element, \Drupal\Core\Form\F
         ),
       ),
     );
-    service_location_add_places_js_library();
+    //service_location_add_places_js_library();
   }
 }
 
@@ -32,6 +32,7 @@ function service_location_field_widget_form_alter(&$element, \Drupal\Core\Form\F
 function service_location_page_attachments(array &$page) {
   // @todo: this needs to be refactored asap, so that we do not load the google
   // library on all the pages!
+  return;
   if (service_location_add_places_js_library(TRUE) || 1) {
     $page['#attached']['html_head'][] = array(
       array(

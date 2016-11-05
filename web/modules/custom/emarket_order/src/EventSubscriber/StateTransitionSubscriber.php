@@ -53,8 +53,8 @@ class StateTransitionSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[WorkbenchModerationEvents::STATE_TRANSITION][] = array('checkStateTransition');
-    return $events;
+    //$events[WorkbenchModerationEvents::STATE_TRANSITION][] = array('checkStateTransition');
+    return [];
   }
 
   /**

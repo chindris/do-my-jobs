@@ -1,0 +1,12 @@
+diff --git a/src/FormManglerService.php b/src/FormManglerService.php
+index cd4141d..5da2e6b 100644
+--- a/src/FormManglerService.php
++++ b/src/FormManglerService.php
+@@ -11,6 +11,7 @@ use Drupal\rabbit_hole\Plugin\RabbitHoleEntityPluginManager;
+ use Drupal\rabbit_hole\Entity\BehaviorSettings;
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+ use Drupal\Core\StringTranslation\TranslationInterface;
++use Drupal\Core\Form\FormStateInterface;
+ 
+ /**
+  * Class FormManglerService.

@@ -48,7 +48,6 @@
         "drupal/config_installer": "dev-8.x-1.x",
         "drupal/varnish": "dev-amazee",
         "drupal/inline_entity_form": "~8.0",
-        "drupal/workbench_moderation": "~8.0",
         "drupal/drupal-extension": "^3.2",
         "drupal/rabbit_hole": "dev-8.x-1.x",
         "drupal/address": "^8.1@beta",
@@ -75,9 +74,6 @@
     },
     "extra": {
         "patches": {
-            "drupal/metatag": {
-                "DrupalConsole integration breaks Drush": "patches/contrib/metatag/metatag-deactivate_drupalconsole_services_0.patch"
-            },
             "drupal/rabbit_hole": {
                 "TypeError when editing content type settings - 2780501": "patches/contrib/rabbit_hole/typeerror-on-ct-settings-2780501-2.patch"
             }
