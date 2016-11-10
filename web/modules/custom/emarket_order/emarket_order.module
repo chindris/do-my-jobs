@@ -265,11 +265,11 @@ function emarket_order_entity_field_access($operation, \Drupal\Core\Field\FieldD
 /**
  * Implements hook_ENTITY_TYPE_presave().
  */
-function emarket_order_node_presave(\Drupal\node\NodeInterface $node) {
+function emarket_order_node_presave(\Drupal\node\Entity\Node $node) {
   // For new orders, if the user is authenticated, then we directly set them as
   // confirmed.
   if ($node->isNew() && $node->bundle() == 'order') {
-    $author = $node->getRevisionAuthor();
+    $author = $node->getRevisionUser();
     if ($author->isAuthenticated()) {
       $node->set('field_order_confirmed', 1);
     }
@@ -279,17 +279,15 @@ function emarket_order_node_presave(\Drupal\node\NodeInterface $node) {
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function emarket_order_node_insert(\Drupal\node\NodeInterface $node) {
+function emarket_order_node_insert(\Drupal\node\Entity\Node $node) {
   // For now, we just need the same things as the update hook does.
   emarket_order_node_update($node);
 }
 
 /**
- * Implements hook_ENTITY_TYPE_update() for nodes.
- *
- * @param \Drupal\node\NodeInterface $node
+ * Implements hook_ENTITY_TYPE_update().
  */
-function emarket_order_node_update(\Drupal\node\NodeInterface $node) {
+function emarket_order_node_update(\Drupal\node\Entity\Node $node) {
   // When we update an order, we will check all the order items, and for the
   // ones which do not have the order reference set, we will update them.
   // @todo: find a more performant way of doing this.
@@ -314,6 +312,9 @@ function emarket_order_node_update(\Drupal\node\NodeInterface $node) {
 
 /**
  * Implements hook_node_access().
+ *
+ * @todo: this needs massive refactoring, too much complicated logic here, hard
+ * to test.
  */
 function emarket_order_node_access(\Drupal\node\NodeInterface $node, $op, \Drupal\Core\Session\AccountInterface $account) {
   // For orders, any user which has the special link with the hash in it has
@@ -324,7 +325,7 @@ function emarket_order_node_access(\Drupal\node\NodeInterface $node, $op, \Drupa
   // field. But it is true that the system is much more flexible with nodes.
   // Some for deleting. When we implement this, then we can update the
   // permissions.
-  if ($op == 'update' || $op == 'view' || $op == 'delete') {
+  if ($op == 'update' || $op == 'view' || ($op == 'delete' && $node->bundle() != 'order')) {
     $node_to_check = NULL;
     switch ($node->bundle()) {
       // For order item nodes, we actually have to check the access to their
@@ -350,13 +351,27 @@ function emarket_order_node_access(\Drupal\node\NodeInterface $node, $op, \Drupa
       if ($hash === $valid_hash) {
         return \Drupal\Core\Access\AccessResult::allowed();
       }
-      // If we are here, we can still allow the user to view the node in case
-      // he is the service provider.
-      if ($op == 'view' && $account->isAuthenticated()) {
+
+      // If the user is the service provider, we allow him to view or edit the
+      // order in some circumstances.
+      if ($account->isAuthenticated() && $node->bundle() == 'order') {
         try {
           $service_provider = $node_to_check->get('field_service_provider')->referencedEntities();
           if (!empty($service_provider) && $service_provider[0]->id() == $account->id()) {
-            return \Drupal\Core\Access\AccessResult::allowed();
+            // The service provider can always see the order for now. We should
+            // maybe change this that he can see it only after the order was
+            // submitted to him.
+            if ($op == 'view') {
+              return \Drupal\Core\Access\AccessResult::allowed();
+            }
+            elseif ($op == 'update') {
+              /* @var \Drupal\content_moderation\StateTransitionValidationInterface $state_transition_service */
+              $state_transition_service = \Drupal::service('content_moderation.state_transition_validation');
+              $transitions = $state_transition_service->getValidTransitions($node_to_check, $account);
+              if (!empty($transitions)) {
+                return \Drupal\Core\Access\AccessResult::allowed();
+              }
+            }
           }
         }
         catch (\InvalidArgumentException $e) {
@@ -420,9 +435,9 @@ function emarket_order_get_order_from_order_item(\Drupal\node\NodeInterface $ord
 }
 
 /**
- * Implements hook_workbench_moderation_valid_transitions_alter().
+ * Implements hook_content_moderation_valid_transitions_alter().
  */
-function emarket_order_workbench_moderation_valid_transitions_alter(array &$transitions, \Drupal\Core\Entity\ContentEntityInterface $entity, \Drupal\Core\Session\AccountInterface $user) {
+function emarket_order_content_moderation_valid_transitions_alter(array &$transitions, \Drupal\Core\Entity\ContentEntityInterface $entity, \Drupal\Core\Session\AccountInterface $user) {
   // We do our alteration only for order items. We will have to check if the
   // account is the owner or the service provider of the entity. Based on this,
   // we will have to unset different transitions.
@@ -453,6 +468,14 @@ function emarket_order_notification_shutdown_callback($uuid, $transition_key) {
   }
 }
 
+/**
+ * Sends an notification email as a result of a transition.
+ *
+ * @param $node
+ *   The order which has been updated.
+ * @param $transition_key
+ *   The transition key. @see StateTransitionSubscriber::getInterestedStateTransitions()
+ */
 function emarket_order_notify($node, $transition_key) {
   $recipients = emarket_order_notification_recipients($node, $transition_key);
   foreach ($recipients as $recipient) {
@@ -545,32 +568,22 @@ function emarket_order_get_valid_transitions_per_user_role($role, \Drupal\Core\E
   $transitions = array(
     'author' => array(
       'draft_draft',
-      'draft_submit',
-      'submitted_draft',
+      'draft_submitted',
+      'draft_canceled',
       'submitted_submitted',
-      'submitted_aborted',
-      'accepted_aborted',
-      'needs_clarification_draft',
-      'needs_clarification_submited',
-      'needs_clarification_aborted',
+      'submitted_canceled',
+      'canceled_draft',
+      'canceled_submitted',
       'rejected_draft',
       'rejected_submitted',
-      'rejected_aborted',
     ),
     'service_provider' => array(
+      'submitted_submitted',
       'submitted_accepted',
-      'submitted_needs_clarification',
       'submitted_rejected',
       'accepted_accepted',
-      'accepted_needs_clarification',
       'accepted_rejected',
-      'accepted_progress',
-      'needs_clarification_accepted',
-      'needs_clarification_needs_clarification',
-      'needs_clarification_rejected',
-      'progress_needs_clarification',
-      'progress_delivery',
-      'delivery_done',
+      'accepted_done',
     ),
   );
   // @todo: does this code really belong here?

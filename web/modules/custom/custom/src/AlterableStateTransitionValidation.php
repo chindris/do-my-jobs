@@ -7,12 +7,12 @@
 
 namespace Drupal\custom;
 
+use Drupal\content_moderation\StateTransitionValidation;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\workbench_moderation\StateTransitionValidation;
 
 /**
  * Overwrites the Drupal\workbench_moderation\StateTransitionValidation to add
@@ -39,7 +39,7 @@ class AlterableStateTransitionValidation extends StateTransitionValidation {
    */
   public function getValidTransitions(ContentEntityInterface $entity, AccountInterface $user) {
     $transitions = parent::getValidTransitions($entity, $user);
-    $this->moduleHandler->alter('workbench_moderation_valid_transitions', $transitions, $entity, $user);
+    $this->moduleHandler->alter('content_moderation_valid_transitions', $transitions, $entity, $user);
     return $transitions;
   }
 
