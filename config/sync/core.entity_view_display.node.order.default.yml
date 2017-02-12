@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_display.comment.comment.default
     - field.field.node.order.comment
     - field.field.node.order.field_delivery_address
     - field.field.node.order.field_delivery_date
@@ -16,6 +17,7 @@ dependencies:
     - address
     - collapsible_comments
     - datetime
+    - telephone
     - user
 id: node.order.default
 targetEntityType: node
@@ -27,8 +29,13 @@ content:
     label: above
     settings:
       pager_id: 0
+      view_mode: default
     third_party_settings: {  }
     type: collapsible_comments
+  content_moderation_control:
+    weight: -20
+    settings: {  }
+    third_party_settings: {  }
   field_delivery_address:
     weight: 1
     label: above
@@ -60,9 +67,10 @@ content:
   field_phone:
     weight: 6
     label: above
-    settings: {  }
+    settings:
+      title: ''
     third_party_settings: {  }
-    type: basic_string
+    type: telephone_link
   field_service_provider:
     weight: 3
     label: above

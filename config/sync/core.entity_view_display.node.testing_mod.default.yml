@@ -1,0 +1,31 @@
+uuid: b4cc0254-166d-4b00-88cb-5b161f57c042
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.testing_mod.body
+    - node.type.testing_mod
+  module:
+    - text
+    - user
+id: node.testing_mod.default
+targetEntityType: node
+bundle: testing_mod
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+  content_moderation_control:
+    weight: -20
+    settings: {  }
+    third_party_settings: {  }
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  langcode: true

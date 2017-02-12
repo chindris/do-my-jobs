@@ -1,0 +1,33 @@
+uuid: 1e6e3ea5-d376-4bc1-a185-db5eed54db08
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.service_providers
+  module:
+    - views
+name: service_providers
+label: 'Service providers'
+display: modal
+display_configuration:
+  width: '650'
+  height: '500'
+  link_text: 'Select a service provider'
+  auto_open: false
+selection_display: no_display
+selection_display_configuration:
+  view: service_providers
+  view_display: service_providers_browser
+widget_selector: single
+widget_selector_configuration: {  }
+widgets:
+  fcb09605-ebc5-4d5b-9759-d81326887bdc:
+    settings:
+      view: service_providers
+      view_display: service_providers_browser
+      submit_text: 'Select service provider'
+      auto_select: false
+    uuid: fcb09605-ebc5-4d5b-9759-d81326887bdc
+    weight: 1
+    label: 'Service providers'
+    id: view

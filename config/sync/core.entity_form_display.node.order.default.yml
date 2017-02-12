@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - entity_browser.browser.service_providers
     - field.field.node.order.comment
     - field.field.node.order.field_delivery_address
     - field.field.node.order.field_delivery_date
@@ -13,9 +14,13 @@ dependencies:
     - field.field.node.order.field_service_provider
     - node.type.order
   module:
+    - address
     - content_moderation
+    - datetime
+    - entity_browser
     - inline_entity_form
     - path
+    - telephone
 id: node.order.default
 targetEntityType: node
 bundle: order
@@ -23,8 +28,26 @@ mode: default
 content:
   created:
     type: datetime_timestamp
-    weight: 4
+    weight: 9
     settings: {  }
+    third_party_settings: {  }
+  field_delivery_address:
+    type: address_default
+    weight: 6
+    settings:
+      default_country: null
+    third_party_settings: {  }
+  field_delivery_date:
+    type: datetime_default
+    weight: 5
+    settings: {  }
+    third_party_settings: {  }
+  field_email:
+    type: email_default
+    weight: 3
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_order_items:
     type: inline_entity_form_complex
@@ -38,27 +61,46 @@ content:
       override_labels: false
       allow_existing: false
     third_party_settings: {  }
+  field_phone:
+    type: telephone_default
+    weight: 4
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_service_provider:
+    type: entity_browser_entity_reference
+    weight: 2
+    settings:
+      entity_browser: service_providers
+      field_widget_display: rendered_entity
+      field_widget_remove: true
+      open: true
+      selection_mode: selection_append
+      field_widget_display_settings:
+        view_mode: compact
+      field_widget_edit: false
+    third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 3
+    weight: 8
     settings: {  }
     third_party_settings: {  }
   path:
     type: path
-    weight: 7
+    weight: 12
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 5
+    weight: 10
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 6
+    weight: 11
     third_party_settings: {  }
   title:
     type: string_textfield
@@ -69,7 +111,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 2
+    weight: 7
     settings:
       match_operator: CONTAINS
       size: 60
@@ -77,9 +119,4 @@ content:
     third_party_settings: {  }
 hidden:
   comment: true
-  field_delivery_address: true
-  field_delivery_date: true
-  field_email: true
   field_order_confirmed: true
-  field_phone: true
-  field_service_provider: true

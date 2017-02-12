@@ -16,16 +16,10 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:user'
+  handler: views
   handler_settings:
-    include_anonymous: false
-    filter:
-      type: role
-      role:
-        service_provider: service_provider
-        administrator: '0'
-    target_bundles: null
-    sort:
-      field: _none
-    auto_create: false
+    view:
+      view_name: service_providers
+      display_name: service_providers
+      arguments: {  }
 field_type: entity_reference
